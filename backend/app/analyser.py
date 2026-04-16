@@ -231,6 +231,7 @@ Rejection Reason: {rejection_reason}
 
 {pattern_context}
 
+Do not use markdown formatting, headers, or ** bold text. Use plain text only.
 Please provide your analysis in this exact format:
 
 PLAIN_ENGLISH: [Explain in 2-3 simple sentences what the insurer is actually 
@@ -275,6 +276,11 @@ IMPORTANT RULES:
     # Get Claude's response text
     response_text = message.content[0].text
     # message.content[0].text extracts the actual text from Claude's response
+    print(f"Claude response: {response_text}")
+# TEMPORARY DEBUG LINE
+# This prints Claude's raw response to Terminal
+# so we can see exactly what format it is returning
+# We will remove this after we fix the parser
 
     # Parse Claude's structured response into a dictionary
     analysis = {}
