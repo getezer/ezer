@@ -38,7 +38,10 @@ from backend.app.extractor import process_denial_letter
 # Think of it as bringing the chef from the kitchen
 # into the main dining room so they can receive orders.
 
-
+from backend.app.analyser import analyse_rejection
+# This imports our analyse_rejection function from analyser.py
+# It takes the extracted fields and returns legal analysis
+# This connects our two core engines together
 # -------------------------------------------------------
 # ENVIRONMENT SETUP
 # -------------------------------------------------------
@@ -211,4 +214,117 @@ async def extract_denial_letter(file: UploadFile = File(...)):
         
         "extracted_fields": result
         # The dictionary of all fields Claude extracted from the denial letter
+    }
+    # -------------------------------------------------------
+# ENDPOINT 4: Analyse Denial Letter
+# This is Ezer's most powerful endpoint.
+# It combines extraction AND analysis in one single step.
+# The user uploads a PDF and gets back:
+# - All extracted fields
+# - Plain English explanation
+# - Contestability assessment
+# - Legal contestation language
+# - Next steps
+# This is the endpoint the frontend will use.
+# -------------------------------------------------------
+
+@app.post("/analyse")
+# When someone sends a POST request to /analyse,
+# run this function. This is the main Ezer endpoint.
+
+async def analyse_denial_letter(file: UploadFile = File(...)):
+    """
+    WHAT THIS ENDPOINT DOES:
+    Accepts a PDF denial letter upload.
+    Runs it through extraction then analysis.
+    Returns the complete Ezer response in one call.
+    
+    INPUT: A PDF file uploaded by the user
+    OUTPUT: Extracted fields + full legal analysis
+    """
+    
+    # -------------------------------------------------------
+    # STEP 1: Validate the file is a PDF
+    # -------------------------------------------------------
+    
+    if not file.filename.endswith('.pdf'):
+        # Reject anything that is not a PDF
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are accepted. Please upload a PDF denial letter."
+        )
+    
+    # -------------------------------------------------------
+    # STEP 2: Read the uploaded file
+    # -------------------------------------------------------
+    
+    contents = await file.read()
+    # Read the entire PDF into memory as bytes
+    # await means wait for this to complete before moving on
+    
+    # -------------------------------------------------------
+    # STEP 3: Process and Discard - Ezer's privacy principle
+    # Create a temporary file, use it, then delete it
+    # Nothing is stored permanently on our servers
+    # -------------------------------------------------------
+    
+    with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmp_file:
+        # Create a temporary PDF file
+        # delete=True means it is automatically deleted when done
+        
+        tmp_file.write(contents)
+        # Write the uploaded PDF into the temporary file
+        
+        tmp_file.flush()
+        # Force Python to write everything to disk immediately
+        
+        # -------------------------------------------------------
+        # STEP 4: Extract fields from the PDF
+        # -------------------------------------------------------
+        
+        try:
+            extracted_fields = process_denial_letter(tmp_file.name)
+            # Call our extractor to read the PDF
+            # extracted_fields now contains insurer, CCN, rejection reason etc
+            
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Extraction failed: {str(e)}"
+            )
+        
+        # -------------------------------------------------------
+        # STEP 5: Analyse the extracted fields
+        # -------------------------------------------------------
+        
+        try:
+            analysis = analyse_rejection(extracted_fields)
+            # Call our analyser to assess the rejection
+            # analysis now contains plain English explanation,
+            # contestability, legal language, and next steps
+            
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Analysis failed: {str(e)}"
+            )
+    
+    # -------------------------------------------------------
+    # STEP 6: Return the complete Ezer response
+    # -------------------------------------------------------
+    
+    return {
+        "success": True,
+        # Confirms everything worked
+        
+        "filename": file.filename,
+        # The original filename so user knows which letter was processed
+        
+        "extracted_fields": extracted_fields,
+        # All the fields extracted from the PDF
+        # insurer, CCN, rejection reason, date, hospital, patient
+        
+        "analysis": analysis
+        # The complete legal analysis from Claude
+        # plain English explanation, contestability, legal language
     }
