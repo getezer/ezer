@@ -158,3 +158,83 @@ Image and screenshot support deferred to V1.1.
 **Why:** Real HDFC ERGO letters are clean PDFs.
 Most hospital TPA letters are PDFs. Covers 80% of use cases.
 Claude Vision AP
+
+---
+
+## Decision 17 - Case file presented as human readable card
+**Date:** April 17, 2026
+**Decision:** Case Metadata JSON is displayed as a human
+readable card on the frontend. User never sees raw JSON.
+Download button says "Download Your Case File" not
+"Download JSON."
+
+**Why:** Most users have never heard of JSON. A distressed
+policyholder will not know what to do with a .json file.
+The card format makes the data accessible. The friendly
+label removes confusion. The JSON is still JSON underneath
+for machine readability on return visits.
+
+**V1.1 addition:** PDF case summary for users who want
+a printable human readable version.
+
+---
+
+## Decision 18 - Five config files for all non-code content
+**Date:** April 17, 2026
+**Decision:** Created five JSON config files that contain
+all content that non-developers may need to update.
+
+**Files:**
+- backend/config/legal_language.json
+- backend/config/cgo_directory.json
+- backend/config/letter_templates.json
+- backend/config/ombudsman_directory.json
+- backend/config/escalation_ladder.json
+- backend/config/app_config.json
+
+**Why:** Lawyers update legal language. Business updates
+CGO emails. Operations updates Ombudsman details.
+None of these people should need a developer to make
+these changes. Config files enable non-developer
+maintenance from day one.
+
+**V2 addition:** Admin screen with approval workflow
+so non-developers edit through a UI not files directly.
+
+---
+
+## Decision 19 - Consent validated in backend AND frontend
+**Date:** April 17, 2026
+**Decision:** Consent is enforced at two levels.
+
+Frontend level: Generate button stays greyed out until
+user checks consent checkbox. API is never called
+without consent.
+
+Backend level: /generate-cgo endpoint checks consent
+flag. Returns 400 error if consent is false or missing.
+Letter is never generated without consent.
+
+**Why:** Two layers of protection. Frontend protects
+user experience. Backend protects against any direct
+API calls that bypass the frontend. Both are needed
+for complete protection.
+
+**Testing note:** During backend testing we manually
+set consent true in test payload. Real consent comes
+from user checking checkbox on frontend in Prompt 6.
+
+---
+
+## Decision 20 - requirements.txt to be created tomorrow
+**Date:** April 17, 2026
+**Decision:** Create requirements.txt as first task
+of next session before any other work.
+
+**Why:** requirements.txt lists all Python libraries
+Ezer needs. Essential for deployment. Without it
+Railway or Render cannot install dependencies.
+Currently missing from the repository.
+
+**Command to generate:**
+pip freeze > requirements.txt
