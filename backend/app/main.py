@@ -33,6 +33,9 @@ import tempfile
 # privacy principle from the PRD - we never store uploads.
 
 from backend.app.extractor import process_denial_letter
+from backend.app.letter_generator import generate_cgo_letter
+# Import letter generator function - generates CGO complaint letters
+# Reads legal language from config files - no hardcoding
 # This imports our process_denial_letter function from
 # the extractor.py file we just wrote.
 # Think of it as bringing the chef from the kitchen
@@ -327,4 +330,105 @@ async def analyse_denial_letter(file: UploadFile = File(...)):
         "analysis": analysis
         # The complete legal analysis from Claude
         # plain English explanation, contestability, legal language
+    }
+
+
+from pydantic import BaseModel
+# BaseModel is used to define the exact structure of incoming
+# request data - like a form with specific required fields
+
+
+class CGORequest(BaseModel):
+    """
+    WHAT THIS CLASS DOES:
+    Defines the exact structure of data the frontend must send
+    when requesting a CGO letter generation.
+    Think of it as a form that must be filled before proceeding.
+    """
+
+    policyholder_name: str
+    # Name of the person sending the complaint letter
+
+    policy_address: str
+    # Address on the policy document
+    # Needed for Ombudsman jurisdiction mapping
+
+    consent: bool
+    # True if user checked the consent checkbox
+    # False means letter will not be generated
+
+    consent_timestamp: str
+    # When user gave consent in ISO 8601 format
+    # Example: "2026-04-17T14:30:00"
+
+    extracted_fields: dict
+    # Fields extracted from the denial letter
+    # Passed from the /analyse endpoint response
+
+    analysis: dict
+    # Analysis from the /analyse endpoint response
+    # Contains denial pattern and contestation language
+
+    amount_disputed: str = "As per policy terms"
+    # Optional - defaults to "As per policy terms"
+
+
+@app.post("/generate-cgo")
+# When frontend sends POST to /generate-cgo run this function
+
+async def generate_cgo_endpoint(request: CGORequest):
+    """
+    WHAT THIS ENDPOINT DOES:
+    Receives all case information from the frontend.
+    Validates consent first.
+    Generates complete CGO complaint letter.
+    Returns letter with all metadata including consent record.
+    """
+
+    # -------------------------------------------------------
+    # STEP 1: Validate consent - mandatory per Decision 8
+    # -------------------------------------------------------
+
+    if not request.consent:
+        # If user did not check the consent checkbox
+        raise HTTPException(
+            status_code=400,
+            detail="Informed consent is required before generating a CGO letter. Please confirm you understand this is guidance only and not legal advice."
+        )
+
+    # -------------------------------------------------------
+    # STEP 2: Generate the CGO letter
+    # -------------------------------------------------------
+
+    try:
+        result = generate_cgo_letter(
+            extracted_fields=request.extracted_fields,
+            analysis=request.analysis,
+            policyholder_name=request.policyholder_name,
+            policy_address=request.policy_address,
+            consent=request.consent,
+            consent_timestamp=request.consent_timestamp,
+            amount_disputed=request.amount_disputed
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Letter generation failed: {str(e)}"
+        )
+
+    # -------------------------------------------------------
+    # STEP 3: Return the complete response
+    # -------------------------------------------------------
+
+    return {
+        "success": True,
+        "letter": result,
+        "next_steps": {
+            "step1": "Review the letter carefully before sending.",
+            "step2": "Verify the CGO email address on the insurer website.",
+            "step3": "Send the letter by email. Keep a copy.",
+            "step4": "Note the date sent. Insurer has 15 days to respond.",
+            "step5": "Download your Case JSON file to track this case."
+        }
     }
