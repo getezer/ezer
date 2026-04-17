@@ -1,119 +1,160 @@
-# Ezer - Learning Journal
+# Ezer - Architecture Decision Log
 ## Badal Satapathy | Started April 2026
 
-This file documents what I learn each day while building Ezer.
-Written in my own words. For my own growth.
-Also visible on GitHub as evidence of a builder who reflects.
+This file documents every significant technical and product decision
+made while building Ezer, and the reasoning behind each one.
+
+Standard practice in professional engineering teams.
+Visible on GitHub as evidence of structured thinking.
 
 ---
 
-## Day 1 - April 15, 2026
-### Environment Setup
+## Standing Rules - Apply to Every Session
 
-**What we built:**
-Set up the entire development environment on a fresh MacBook Air.
-By end of day, code was live on github.com/getezer/ezer.
+**Rule 1: Architecture discussion before coding**
+Design first. Code second. No file gets written without
+discussing what it does, who interacts with it, what might
+change over time, and what should be code vs configuration.
+Established: April 17, 2026. Reason: jumped into
+letter_generator.py without architecture discussion and
+had to stop and redesign.
 
-**What I learned:**
+**Rule 2: Proper comments on all code**
+Every file, every function, every non-obvious line gets
+a plain English comment. Code you can explain is code you own.
+Established: April 16, 2026.
 
-**Homebrew** - The App Store for developer tools on Mac.
-Everything else gets installed through this one tool.
-
-**Python** - The language the Ezer backend is written in.
-Version 3.11 specifically - always use a specific version, not the latest,
-because libraries need time to catch up with new versions.
-
-**Node.js** - The engine that runs React, our frontend framework.
-We do not write Node.js code directly. It just needs to be running.
-
-**VS Code** - The workbench where all Ezer code is written and read.
-Like Microsoft Word but for code. Free. Used by millions of developers.
-
-**Git and GitHub** - Git takes snapshots of your work locally.
-GitHub stores those snapshots online. Together they mean your work
-is never lost and always visible to the world as your portfolio.
-
-**Virtual environment (venv)** - A private isolated box for Ezer's
-Python tools. Keeps Ezer's dependencies separate from everything
-else on my Mac. Named venv by convention - every developer knows
-what it means.
-
-**Terminal** - An application on Mac that lets you give direct
-instructions to your computer by typing commands. The language
-is called zsh. Commands look cryptic but each one does one specific
-thing. Unix commands have weird names because they were named by
-engineers in the 1970s who valued brevity over clarity.
-
-**Key insight from Day 1:**
-A website has two parts - frontend (what the user sees, built with React)
-and backend (where the work happens, built with Python and FastAPI).
-Like a restaurant - the dining room and the kitchen.
+**Rule 3: Config files for non-developer content**
+Legal language, email templates, escalation text — all live
+in JSON config files. Python code reads from these files.
+Non-developers can update content without touching code.
+Established: April 17, 2026.
 
 ---
 
-## Day 2 - April 16, 2026
-### PDF Extraction and Rejection Analysis
+## Decision 1 - Combined /analyse endpoint
+**Date:** April 16, 2026
+**Decision:** Built one /analyse endpoint that runs both
+extraction and analysis, returning a single combined response.
 
-**What we built:**
-The brain of Ezer. Two engines that together read a denial letter
-and understand it legally.
-
-Engine 1 - PDF Extractor: Reads a denial letter PDF and pulls out
-insurer name, policy number, CCN, rejection reason, date, hospital,
-patient name, and denial type.
-
-Engine 2 - Rejection Analyser: Takes the extracted fields and
-assesses contestability, explains what the insurer is claiming
-in plain English, generates legally grounded contestation language,
-identifies structural impact, and recommends next steps.
-
-Both tested on my father's real HDFC ERGO denial letters.
-Both returned HIGH contestability with correct legal grounding.
-
-**What I learned:**
-
-**FastAPI** - A Python framework for building backends.
-A framework is like a pre-built kitchen - counters, stove, sink
-already there. You bring the ingredients and cook.
-FastAPI handles file uploads, responses, and error handling.
-You write the business logic.
-
-**API vs local function** - A local function runs on your own
-computer in microseconds. An API call sends a message over the
-internet to someone else's computer and waits for a response.
-Seconds not microseconds. Costs money. Can fail.
-
-**JSON** - The universal language of web communication.
-Not a file format we create. Just structured text that travels
-between systems. The user decides whether to save it as a file.
-Curly brackets, key-value pairs, readable by any programming language.
-
-**Process and Discard** - Ezer's privacy principle from the PRD.
-We use temporary files that are automatically deleted after processing.
-Nothing is stored on our server. The user owns their data.
-This is both a legal compliance decision and a trust differentiator.
-
-**SSH keys** - A permanent secure connection between my Mac and GitHub.
-Like a key card that never expires and never needs a password.
-Private key stays on my Mac. Public key goes to GitHub.
-Set up once. Works forever.
-
-**API key security** - An API key is like a hotel key card.
-It proves you are a paying guest. Never share it. Never put it
-in code. Always store in .env file. If exposed, delete and replace immediately.
-
-**Key insight from Day 2:**
-The API response is just a message. Like a WhatsApp message.
-Who decides what to do with it after it arrives - store it,
-display it, forward it, ignore it - is entirely the developer's decision.
-This is what software architecture actually is. Not writing code.
-Making decisions about how information flows.
-
-**Personal note:**
-Asked what I thought were basic questions about APIs, JSON, and
-function returns. Realised these are actually architecture questions.
-The systems thinking from 23 years of operations work is directly
-applicable to software design. The vocabulary is different.
-The thinking is the same.
+**Why:** PRD principle — zero friction. A policyholder in
+distress wants one answer, not two separate calls to manage.
+Two API calls happen invisibly behind the scenes.
 
 ---
+
+## Decision 2 - Temporary files for PDF processing
+**Date:** April 16, 2026
+**Decision:** Use Python tempfile module. Files auto-deleted
+after processing.
+
+**Why:** Implements Process and Discard privacy principle
+from PRD Section 14. DPDP Act 2023 compliance.
+Trust differentiator for B2B clients.
+
+---
+
+## Decision 3 - Claude Sonnet for extraction and analysis
+**Date:** April 16, 2026
+**Decision:** Use claude-sonnet-4-6 for all API calls.
+
+**Why:** Fast, accurate, cost effective for development volume.
+Opus gives marginally better analysis at 5x cost.
+Revisit at scale.
+
+---
+
+## Decision 4 - Python virtual environment named venv
+**Date:** April 15, 2026
+**Decision:** Named venv following universal Python convention.
+
+**Why:** Every professional Python developer recognises venv.
+Ezer GitHub is a portfolio. Standard naming signals
+professional practice.
+
+---
+
+## Decision 5 - FastAPI over Flask or Django
+**Date:** April 15, 2026
+**Decision:** FastAPI as Python backend framework.
+
+**Why:** Appears in almost every AI engineering job description.
+Auto-generates API documentation. Handles async natively.
+Standard for AI backends in 2026.
+
+---
+
+## Decision 6 - Config files for legal language
+**Date:** April 17, 2026
+**Decision:** All legal language, CGO emails, and letter
+templates live in JSON config files under backend/config/.
+Python code reads from these files. No hardcoding.
+
+**Files created:**
+- legal_language.json — all legal paragraphs by denial pattern
+- cgo_directory.json — CGO email addresses by insurer
+- letter_templates.json — letter structure and boilerplate
+
+**Why:** Lawyers and business users can update content without
+touching Python code. Supports internationalisation.
+Aligns with PRD principle — all text in separate language files.
+
+---
+
+## Decision 7 - CMS with approval workflow deferred to V2
+**Date:** April 17, 2026
+**Decision:** Full screen-based content management with
+business approval workflow deferred to V2.
+
+**Why:** Building a CMS takes 2 to 3 weeks. V1 has one user —
+the founder. JSON files edited directly in V1. Admin screen
+added in V2 when B2B clients need non-developer access.
+PRD to be updated to reflect this.
+
+---
+
+## Decision 8 - Informed consent gate
+**Date:** April 17, 2026
+**Decision:** Mandatory three-sentence consent gate before
+CGO letter generation. User must check a checkbox to proceed.
+
+**Consent text:**
+"Based on your denial letter, your claim appears contestable.
+Ezer will now generate a formal complaint letter to your
+insurer's Chief Grievance Officer. This is guidance only —
+not legal advice. Outcomes depend on your specific case."
+
+**Why:** Protects Ezer from allegations of encouraging
+unnecessary litigation. Required for IRDAI regulatory
+compliance. Keeps Ezer clearly positioned as guidance,
+not legal advice. Proposed by founder during morning
+reflection, April 17, 2026.
+
+---
+
+## Decision 9 - Consent record in Case Metadata JSON
+**Date:** April 17, 2026
+**Decision:** Consent record lives in user-owned Case
+Metadata JSON. Nothing stored on Ezer servers.
+
+**Fields recorded:**
+- consent_given: true
+- consent_text_version: v1.0
+- consent_timestamp: ISO 8601 format
+- consent_text_shown: exact text displayed
+- case_reference, policy_number, ccn
+
+**Why:** Maintains Process and Discard privacy principle.
+User can produce JSON as proof of informed consent.
+DPDP Act 2023 compliant. No server storage required.
+
+---
+
+## Decision 10 - PDF only for V1
+**Date:** April 17, 2026
+**Decision:** V1 accepts PDF denial letters only.
+Image and screenshot support deferred to V1.1.
+
+**Why:** Real HDFC ERGO letters are clean PDFs.
+Most hospital TPA letters are PDFs. Covers 80% of use cases.
+Claude Vision AP

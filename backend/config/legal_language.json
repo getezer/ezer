@@ -1,0 +1,75 @@
+{
+  "disclaimer": "Ezer is not a legal advisor. Information provided is for guidance only. Consult a qualified advisor for complex cases.",
+
+  "consent_gate": {
+    "version": "v1.0",
+    "heading": "Before we generate your complaint letter",
+    "body": "Based on your denial letter, your claim appears contestable. Ezer will now generate a formal complaint letter to your insurer's Chief Grievance Officer. This is guidance only — not legal advice. Outcomes depend on your specific case.",
+    "checkbox_text": "I understand and want to proceed.",
+    "button_text": "Generate My CGO Letter",
+    "consent_record": {
+      "description": "When user checks the checkbox, record the following in the Case Metadata JSON",
+      "fields": {
+        "consent_given": true,
+        "consent_text_version": "v1.0",
+        "consent_timestamp": "ISO 8601 format - recorded at moment of checkbox click",
+        "consent_text_shown": "Based on your denial letter, your claim appears contestable. Ezer will now generate a formal complaint letter to your insurer's Chief Grievance Officer. This is guidance only — not legal advice. Outcomes depend on your specific case.",
+        "case_reference": "Ezer generated case reference number",
+        "policy_number": "Extracted from denial letter",
+        "ccn": "Extracted from denial letter"
+      },
+      "storage_principle": "Consent record lives in user-owned Case Metadata JSON only. Nothing stored on Ezer servers. Maintains Process and Discard principle. User can produce this JSON as proof of informed consent if ever required."
+    }
+  },
+
+  "patterns": {
+    "INVESTIGATIVE_PROCEDURE": {
+      "plain_english_prefix": "Your insurer has classified your procedure as investigation only.",
+      "desk_review_challenge": "The denial was issued without physical examination of the patient by the insurer's team. The treating specialist determined necessity based on direct assessment. A desk review cannot override a practising professional's judgement without specific documented grounds.",
+      "prerequisite_language": "The procedure for which cashless approval was sought was not a standalone investigation but a mandatory clinical prerequisite for the planned treatment. The treating specialist determined that this procedure was essential to determine precise treatment parameters required for safe and effective intervention.",
+      "legal_grounding": "Under IRDAI Health Insurance Regulations, the treating doctor's clinical assessment carries primacy over a desk review conducted without patient examination. Denial of a mandatory prerequisite procedure effectively denies the entire treatment episode.",
+      "ombudsman_note": "The Insurance Ombudsman has strong precedent in favour of policyholders in investigative procedure trap denials."
+    },
+
+    "MEDICAL_NECESSITY": {
+      "plain_english_prefix": "Your insurer claims hospitalisation was not medically necessary.",
+      "vague_denial_language": "The stated reason for denial is vague and non-specific. The insurer has not identified which specific documents were reviewed, which documents were found deficient, what clinical standard was applied, or whether an independent medical opinion was sought.",
+      "legal_grounding": "Under IRDAI guidelines, an insurer is required to provide specific and documented grounds for denial. A blanket statement that indication for hospitalisation cannot be established does not meet this standard and constitutes an arbitrary denial.",
+      "burden_of_proof": "The burden of proving that hospitalisation was not medically necessary lies with the insurer. A desk review without patient examination does not discharge this burden.",
+      "ombudsman_note": "Vague medical necessity denials are among the most frequently overturned by the Insurance Ombudsman."
+    },
+
+    "PRE_EXISTING": {
+      "plain_english_prefix": "Your insurer is claiming a pre-existing condition exclusion.",
+      "legal_grounding": "Under IRDAI regulations, the insurer bears the burden of proving that the condition existed prior to policy inception with specific documented medical evidence. A blanket pre-existing disease exclusion without documented clinical evidence from the time of policy purchase is not a valid ground for denial.",
+      "burden_of_proof": "Non-disclosure must be proven with specific documented evidence from the time of policy purchase. The burden of proof lies with the insurer, not the policyholder.",
+      "ombudsman_note": "Pre-existing disease denials without documented evidence are strongly contestable before the Ombudsman."
+    },
+
+    "GENERAL_DENIAL": {
+      "plain_english_prefix": "Your insurer has denied your claim.",
+      "legal_grounding": "The denial does not provide sufficient specific grounds as required under IRDAI Grievance Redressal Guidelines. The policyholder has the right to a detailed written explanation of the denial with specific reference to policy terms and clinical assessment.",
+      "ombudsman_note": "The Insurance Ombudsman is a free quasi-judicial authority whose decisions are binding on the insurer. Filing a complaint costs nothing and protects your rights."
+    }
+  },
+
+  "structural_impact": {
+    "cashless_chain": "This denial does not just affect this procedure. Without an approved main claim, any further treatment claims may also be affected. Responding promptly protects your coverage for the entire treatment episode.",
+    "life_nominee": "The nominee has the full right to challenge this denial through the Ombudsman process. Many denied life claims are reversed when escalated correctly."
+  },
+
+  "escalation_ladder": {
+    "step1_cgo": "Step 1: CGO complaint. Mandatory first step. Response expected within 15 days.",
+    "step2_bima_bharosa": "Step 2: IRDAI Bima Bharosa. File at bimabharosa.irdai.gov.in if CGO does not respond within 15 days.",
+    "step3_ombudsman": "Step 3: Insurance Ombudsman. Free. Quasi-judicial. Decisions binding on insurer. File at cioins.co.in."
+  },
+
+  "letter_closings": {
+    "cgo_response_demand": "I request a detailed written response to this complaint within 15 days of receipt of this letter as required under IRDAI Grievance Redressal Guidelines.",
+    "escalation_warning": "In the absence of a satisfactory response within 15 days, I reserve the right to escalate this matter to the IRDAI Integrated Grievance Management System on Bima Bharosa and to approach the Insurance Ombudsman having jurisdiction over my area.",
+    "acknowledgement_request": "Please acknowledge receipt of this complaint with a reference number by return email."
+  },
+
+  "last_updated": "April 2026",
+  "update_instructions": "This file contains all legal language used in Ezer. To update legal paragraphs edit the relevant section. Do not change the key names as they are referenced in code. Changes take effect immediately after saving. Have all changes reviewed before deploying to production. Consent gate version must be updated whenever consent text changes so that existing consent records remain traceable to the exact text shown."
+}
