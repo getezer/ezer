@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "product_name": "Ezer",
+  "tagline": "With you through denial.",
+  "last_updated": "April 2026",
+  "update_instructions": "Update version number when releasing new versions. Update disclaimer if legal language changes. All text fields here are displayed to users and can be updated without touching Python code.",
+
+  "disclaimer": "Ezer is not a legal advisor. Information provided is for guidance only. Consult a qualified advisor for complex cases.",
+
+  "data_principle": "Process and Discard. No documents or personal data stored on Ezer servers after your output is generated. Your Case File is your only record. Keep it safe.",
+
+  "return_visit_instruction": "To continue this case on Ezer, upload your Case File when prompted on the return visit screen. Ezer will resume from exactly where you left off.",
+
+  "case_file_label": "Your Ezer Case File",
+
+  "download_button_label": "Download Your Case File",
+
+  "insurance_categories": {
+    "v1": ["Health", "Life"],
+    "v2": ["Motor"],
+    "v3": ["Crop", "Travel"]
+  },
+
+  "supported_document_types": {
+    "v1": ["PDF"],
+    "v1_1": ["PDF", "Image", "Screenshot"]
+  },
+
+  "empathy_messages": {
+    "after_upload": "We have read your denial letter. Take a breath. You are not alone in this. A denial letter feels like a denial of what matters most. It is not. It is the beginning of a process that you have every right to pursue. We will walk with you through every step. Let us begin.",
+    "before_cgo_generation": "Your complaint letter is being prepared. This letter puts your insurer on formal notice. Once sent, the clock starts. They have 15 days to respond.",
+    "after_cgo_generation": "Your CGO complaint letter is ready. Download it, review it carefully, and send it to your insurer today. Keep a copy. The fight back starts now.",
+    "structural_impact_health": "This denial does not just affect this procedure. Without an approved main claim, any further treatment claims may also be affected. Responding promptly protects your coverage for the entire treatment episode.",
+    "structural_impact_life": "The nominee has the full right to challenge this denial through the Ombudsman process. Many denied life claims are reversed when escalated correctly."
+  },
+
+  "phase_labels": {
+    "ANALYSIS_COMPLETE": "Analysis Complete",
+    "CGO_LETTER_GENERATED": "CGO Letter Generated",
+    "CGO_SENT": "CGO Letter Sent",
+    "BIMA_BHAROSA_FILED": "Bima Bharosa Filed",
+    "OMBUDSMAN_FILED": "Ombudsman Complaint Filed"
+  },
+
+  "irdai_cc_email": "complaints@irdai.gov.in",
+
+  "contact_links": {
+    "bima_bharosa": "https://bimabharosa.irdai.gov.in",
+    "ombudsman_portal": "https://cioins.co.in",
+    "irdai_website": "https://www.irdai.gov.in"
+  },
+
+  "reminder_settings": {
+    "max_reminders": 2,
+    "reminder_interval_days": 15,
+    "reminder_note": "Maximum 2 reminders at 15 day intervals as per PRD Section 9 Step 9"
+  },
+
+  "case_json_sections": [
+    "ezer_case",
+    "policyholder",
+    "insurance",
+    "denial",
+    "escalation",
+    "consent",
+    "documents",
+    "ezer_metadata"
+  ]
+}

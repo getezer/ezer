@@ -33,13 +33,16 @@ import tempfile
 # privacy principle from the PRD - we never store uploads.
 
 from backend.app.extractor import process_denial_letter
+# Import PDF extraction function from extractor.py
+# Reads denial letter PDF and pulls out key fields
+
 from backend.app.letter_generator import generate_cgo_letter
-# Import letter generator function - generates CGO complaint letters
+# Import CGO letter generator from letter_generator.py
 # Reads legal language from config files - no hardcoding
-# This imports our process_denial_letter function from
-# the extractor.py file we just wrote.
-# Think of it as bringing the chef from the kitchen
-# into the main dining room so they can receive orders.
+
+from backend.app.case_json import generate_case_json
+# Import case JSON generator from case_json.py
+# Creates the portable case record the user downloads
 
 from backend.app.analyser import analyse_rejection
 # This imports our analyse_rejection function from analyser.py
@@ -431,4 +434,105 @@ async def generate_cgo_endpoint(request: CGORequest):
             "step4": "Note the date sent. Insurer has 15 days to respond.",
             "step5": "Download your Case JSON file to track this case."
         }
+    }
+    from backend.app.case_json import generate_case_json
+# Import case JSON generator from case_json.py
+# This creates the portable case record the user downloads
+
+
+class CaseJSONRequest(BaseModel):
+    """
+    WHAT THIS CLASS DOES:
+    Defines the exact structure of data the frontend
+    must send when requesting a Case Metadata JSON.
+    All fields from the previous steps are passed here.
+    """
+
+    policyholder_name: str
+    # Name of the person who owns this case
+
+    policy_address: str
+    # Address from the policy document
+    # Determines Ombudsman jurisdiction
+
+    phase_completed: str = "CGO_LETTER_GENERATED"
+    # Which stage has been completed
+    # Defaults to CGO_LETTER_GENERATED
+
+    extracted_fields: dict
+    # Fields extracted from denial letter
+
+    analysis: dict
+    # Analysis from analyser.py
+
+    letter_result: dict
+    # Result from letter_generator.py
+    # Contains CGO email, consent record etc
+
+
+@app.post("/case-json")
+# When frontend sends POST to /case-json run this function
+
+async def generate_case_json_endpoint(request: CaseJSONRequest):
+    """
+    WHAT THIS ENDPOINT DOES:
+    Takes all case information and generates the
+    complete Case Metadata JSON for the user to download.
+
+    This is the last step in the Ezer core flow.
+    After this the user has everything they need:
+    - CGO letter to send
+    - Case JSON to track their case and return to Ezer
+
+    INPUT: CaseJSONRequest with all case details
+    OUTPUT: Complete case metadata JSON
+    """
+
+    try:
+        case_data = generate_case_json(
+            extracted_fields=request.extracted_fields,
+            # Fields from denial letter extraction
+
+            analysis=request.analysis,
+            # Legal analysis results
+
+            letter_result=request.letter_result,
+            # CGO letter generation results
+
+            policyholder_name=request.policyholder_name,
+            # Person's name
+
+            policy_address=request.policy_address,
+            # Policy document address
+
+            phase_completed=request.phase_completed
+            # Current escalation stage
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Case JSON generation failed: {str(e)}"
+        )
+
+    return {
+        "success": True,
+        # Confirms generation worked
+
+        "file_label": "Your Ezer Case File",
+        # Human friendly label for the download button
+
+        "download_button_label": "Download Your Case File",
+        # Text for the download button on frontend
+
+        "case_data": case_data,
+        # The complete case metadata
+        # Frontend displays this as a readable card
+        # User downloads this as their case file
+
+        "return_visit_instruction": "Save this file. If you return to Ezer to continue your case, upload this file when prompted.",
+        # Clear instruction so user knows what to do with the file
+
+        "next_step": case_data.get("escalation", {}).get("next_step", {})
+        # The recommended next action from escalation ladder
     }
