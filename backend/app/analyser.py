@@ -69,11 +69,16 @@ DENIAL_PATTERNS = {
     # Insurer claims the hospitalisation was not medically necessary
     # without any clinical basis for this claim
     "MEDICAL_NECESSITY": [
-        "indication cannot be established",
-        "not medically necessary",
-        "indication for hospitalization cannot be established",
-        "medical necessity not established"
-    ],
+    "indication cannot be established",
+    "not medically necessary",
+    "indication for hospitalization cannot be established",
+    "indication for the hospitalization cannot be established",
+    "medical necessity not established",
+    "medically necessary",
+    "clinical necessity",
+    "necessity not established",
+    "cannot be established"
+],
 
     # Pattern H4 - Changing Denial Reasons
     # Insurer gives different reasons across multiple rejections
@@ -276,7 +281,6 @@ IMPORTANT RULES:
     # Get Claude's response text
     response_text = message.content[0].text
     # message.content[0].text extracts the actual text from Claude's response
-    print(f"Claude response: {response_text}")
 # TEMPORARY DEBUG LINE
 # This prints Claude's raw response to Terminal
 # so we can see exactly what format it is returning
