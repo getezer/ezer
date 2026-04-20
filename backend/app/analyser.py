@@ -263,21 +263,22 @@ IMPORTANT RULES:
 - Ezer speaks with empathy - the user is in distress
 """
 
-    # Send to Claude for analysis
-    message = client.messages.create(
-        model="claude-sonnet-4-6",
-        # Using Claude Sonnet - fast and accurate for this task
-
-        max_tokens=1500,
-        # We allow more tokens here because the analysis response
-        # needs to be detailed and thorough
-
-        messages=[
-            {"role": "user", "content": prompt}
-            # Send our prompt as a user message to Claude
-        ]
-    )
-
+        # Send to Claude for analysis
+        message = client.messages.create(
+            model="claude-sonnet-4-6",
+            # Using Claude Sonnet - fast and accurate for this task
+            max_tokens=1500,
+            # We allow more tokens here because the analysis response
+            # needs to be detailed and thorough
+            messages=[
+                {"role": "user", "content": prompt}
+                # Send our prompt as a user message to Claude
+            ],
+            extra_headers={
+                "anthropic-beta": "zero-data-retention-2025-02-19"
+                # Zero Data Retention — Anthropic will not store this call
+            }
+        )
     # Get Claude's response text
     response_text = message.content[0].text
     # message.content[0].text extracts the actual text from Claude's response

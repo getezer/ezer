@@ -182,17 +182,19 @@ Here is the denial letter text:
     message = client.messages.create(
         model="claude-sonnet-4-6",
         # Which Claude model to use. Sonnet is fast and accurate.
-        
         max_tokens=1000,
         # Maximum length of Claude's response.
         # 1000 tokens is roughly 750 words — more than enough for our fields.
-        
         messages=[
             {"role": "user", "content": prompt}
-        ]
-        # We send our prompt as a user message to Claude.
-        # role: "user" means this is coming from the person asking.
-        # content: prompt is the actual message text.
+            # We send our prompt as a user message to Claude.
+            # role: "user" means this is coming from the person asking.
+            # content: prompt is the actual message text.
+        ],
+        extra_headers={
+            "anthropic-beta": "zero-data-retention-2025-02-19"
+            # Zero Data Retention — Anthropic will not store this call
+        }
     )
     
     response_text = message.content[0].text

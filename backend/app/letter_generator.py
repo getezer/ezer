@@ -482,17 +482,16 @@ Generate the complete letter now.
     # -------------------------------------------------------
 
     message = client.messages.create(
-        model="claude-sonnet-4-6",
-        # Claude Sonnet for letter generation
-
-        max_tokens=2000,
-        # Letters can be long - 2000 tokens allows ~1500 words
-
-        messages=[
-            {"role": "user", "content": prompt}
-            # Send our complete prompt to Claude
-        ]
-    )
+    model="claude-sonnet-4-6",
+    max_tokens=1000,  # keep whatever number is already there
+    messages=[
+        {"role": "user", "content": prompt}
+    ],
+    extra_headers={
+        "anthropic-beta": "zero-data-retention-2025-02-19"
+        # Zero Data Retention — Anthropic will not store this call
+    }
+)
 
     letter_text = message.content[0].text
     # Extract the generated letter from Claude's response
