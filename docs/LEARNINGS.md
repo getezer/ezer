@@ -188,3 +188,23 @@ regardless of which product format the policy uses.
 
 When in doubt, extract from CIS first.
 Main Policy Schedule is format-specific and less reliable.
+
+---
+
+## Learning 11 - CGO is internal. Ombudsman is where resolution happens.
+**Date:** April 21, 2026
+**Source:** Founder's direct experience — 3 CGO responses
+from HDFC ERGO reviewed, all deflecting or moving goalposts.
+
+The CGO letter is a procedural gate, not a resolution path.
+IRDAI requires exhausting internal grievance process before
+Ombudsman will accept a complaint. So the CGO step is
+mandatory — but the expectation of resolution must be zero.
+
+Ezer's real value is getting the user to the Ombudsman
+with a complete, well-documented case. The Ombudsman is
+free, binding, and has a 3-month award timeline.
+
+This changes how Screen 6 and Screen 7 must be written.
+CGO letter = complete this step so you can escalate.
+Ombudsman = where your case will actually be heard.

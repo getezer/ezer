@@ -339,3 +339,50 @@ That is not acceptable for a product built for people in distress.
 - Multi-settlement chain linking
 - CGO letter for settlement disputes
 - Document type auto-detection on second visit
+
+---
+
+## Decision 27 - CGO letter is a procedural step, not the destination
+**Date:** April 21, 2026
+**Decision:** Ezer's framing of the CGO letter must be honest —
+it is a mandatory procedural step required before Ombudsman
+escalation, not a resolution mechanism.
+
+**Why:** The CGO is an employee of the insurer. Based on real
+experience with HDFC ERGO — three CGO responses reviewed, all
+deflecting, copy-pasting, or moving goalposts. CGO resolution
+is rare. The CGO letter exists because IRDAI requires you to
+exhaust the insurer's internal grievance process before the
+Ombudsman will accept your complaint.
+
+**The Ombudsman is where resolution happens:**
+- Free of charge
+- Binding on the insurer
+- Award within 3 months
+- Insurer cannot easily appeal
+- Claims up to Rs 50 lakhs
+
+**Impact on Screen 6 and Screen 7 language:**
+Screen 6 — CGO letter generation:
+Do NOT say "get your money back" or imply resolution.
+Say: "This letter completes the required step before
+you can escalate to the Insurance Ombudsman."
+
+Screen 7 — Your Claim File:
+Frame the Ombudsman as the next real step.
+The Claim File is the Ombudsman submission package.
+"Your file is ready for Ombudsman submission if the
+insurer does not resolve within 15 days."
+
+**Impact on product pull:**
+Pull will not come from CGO resolution stories.
+Pull will come from Ombudsman resolution stories.
+A policyholder who won at the Ombudsman because Ezer
+helped them build a complete, well-documented case —
+that is the testimonial that creates word of mouth.
+
+**Impact on V1.1 priority:**
+Ombudsman submission package — print-ready, correctly
+addressed to the right regional office — moves up in
+V1.1 priority. This is the feature that creates real
+user outcomes.
