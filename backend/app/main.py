@@ -438,6 +438,10 @@ async def generate_cgo_endpoint(request: CGORequest):
     from backend.app.case_json import generate_case_json
 # Import case JSON generator from case_json.py
 # This creates the portable case record the user downloads
+from backend.app.policy_extractor import extract_policy_document
+# Import policy document extractor from policy_extractor.py
+# Reads policy PDF and pulls out all key fields including
+# sum insured, waiting periods, riders, pre-existing conditions
 
 
 class CaseJSONRequest(BaseModel):
@@ -535,4 +539,48 @@ async def generate_case_json_endpoint(request: CaseJSONRequest):
 
         "next_step": case_data.get("escalation", {}).get("next_step", {})
         # The recommended next action from escalation ladder
+    }
+    from backend.app.policy_extractor import extract_policy_document
+
+
+# -------------------------------------------------------
+# ENDPOINT 7: Extract Policy Document
+# Accepts a policy PDF upload and returns all key fields.
+# This powers Screen 2 and Screen 3 of the Ezer flow.
+# -------------------------------------------------------
+
+@app.post("/extract-policy")
+async def extract_policy_endpoint(file: UploadFile = File(...)):
+    """
+    INPUT:  A policy PDF uploaded by the user.
+    OUTPUT: All extracted policy fields as structured JSON.
+
+    Called on Screen 2 when user uploads their policy.
+    Result displayed on Screen 3 - Know Your Policy.
+    """
+
+    if not file.filename.endswith('.pdf'):
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are accepted. Please upload a PDF policy document."
+        )
+
+    contents = await file.read()
+
+    with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmp_file:
+        tmp_file.write(contents)
+        tmp_file.flush()
+
+        try:
+            result = extract_policy_document(tmp_file.name)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Policy extraction failed: {str(e)}"
+            )
+
+    return {
+        "success": True,
+        "filename": file.filename,
+        "policy_data": result
     }
