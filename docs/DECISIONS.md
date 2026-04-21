@@ -311,3 +311,31 @@ but pattern needs verification across other insurers before
 building logic around it. Capturing is safe. Acting without
 PRD decision is not. Any flag must be mapped to a user-facing
 action in PRD before Ezer does anything with it.
+
+---
+
+## Decision 26 - V1 is internal only. Public launch after V1.1.
+**Date:** April 21, 2026
+**Decision:** Ezer will not be made publicly available until
+V1.1 is complete. V1 is for internal testing and validation only.
+
+**Why:** V1 handles denial letters and basic settlement awareness.
+V1.1 adds full settlement audit, MOU recovery analysis, and
+multi-settlement chain linking. These are the features that
+make Ezer genuinely complete for a policyholder who has received
+a partial settlement. Launching V1 publicly without V1.1 would
+mean users who upload settlement letters get incomplete guidance.
+That is not acceptable for a product built for people in distress.
+
+**What this means practically:**
+- Beta testing with known users only during V1
+- No public URL, no social media announcement, no Product Hunt
+- LinkedIn launch post drafted but not published until V1.1
+- Domain getezer.app live but not promoted
+
+**V1.1 scope before public launch:**
+- Full MOU recovery analysis
+- Consumables audit against IRDAI non-payable list
+- Multi-settlement chain linking
+- CGO letter for settlement disputes
+- Document type auto-detection on second visit
