@@ -238,3 +238,76 @@ Currently missing from the repository.
 
 **Command to generate:**
 pip freeze > requirements.txt
+
+---
+
+## Decision 21 - Schemas in one central file
+**Date:** April 21, 2026
+**Decision:** All Pydantic data structures live in one file —
+schemas.py. All extractors import from here.
+
+**Why:** Single source of truth. Add a field once, available
+everywhere. No duplication, no drift between files.
+
+---
+
+## Decision 22 - Explicit fields for critical riders, open list for everything else
+**Date:** April 21, 2026
+**Decision:** Six critical riders get explicit boolean fields
+in PolicyDocument. All other riders go in riders_and_addons
+list as RiderAddon objects.
+
+**Critical explicit fields:**
+- protector_rider_active
+- unlimited_restore_active
+- co_payment_percentage
+- aggregate_deductible
+- waiting_period_pre_existing
+- room_rent_limit
+
+**Why:** Ezer reasons about critical fields during denial
+analysis. Open list catches all future riders automatically
+without schema changes. New products from any insurer
+never break the schema.
+
+---
+
+## Decision 23 - ZDR not implemented in V1
+**Date:** April 21, 2026
+**Decision:** Zero Data Retention headers removed from all
+API calls. Not implemented in V1.
+
+**Why:** ZDR requires a signed enterprise agreement with
+Anthropic. Not available on standard API keys.
+Anthropic's default API retention is 7 days as of
+September 2025. Data is never used for model training.
+This is sufficient privacy protection for V1.
+ZDR to be negotiated when Ezer reaches enterprise scale.
+
+---
+
+## Decision 24 - Settlement analysis basic awareness in V1, full audit in V1.1
+**Date:** April 21, 2026
+**Decision:** V1 extracts settlement letter fields and flags
+without_prejudice, mou_clause_present, and protector_rider_balance.
+Full consumables audit and MOU recovery analysis deferred to V1.1.
+
+**Why:** Settlement extractor is built and tested. The schema
+is complete and future-proof. Basic awareness — what was paid,
+what was deducted, rights preserved — is valuable for V1 users.
+Full audit engine needs more settlement letter samples from
+multiple insurers before building confidently.
+
+---
+
+## Decision 25 - without_prejudice is a passive flag in V1
+**Date:** April 21, 2026
+**Decision:** without_prejudice flag is captured but not
+acted upon in V1. No logic uses this flag to generate
+recommendations or next steps.
+
+**Why:** "Without Prejudice" appears in HDFC ERGO settlements
+but pattern needs verification across other insurers before
+building logic around it. Capturing is safe. Acting without
+PRD decision is not. Any flag must be mapped to a user-facing
+action in PRD before Ezer does anything with it.
