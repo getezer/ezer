@@ -386,3 +386,49 @@ Ombudsman submission package — print-ready, correctly
 addressed to the right regional office — moves up in
 V1.1 priority. This is the feature that creates real
 user outcomes.
+---
+
+## Decision 28 - Ombudsman submission package is V1.1 Priority 1
+**Date:** April 21, 2026
+**Decision:** The Ombudsman submission package is the first
+feature to be built in V1.1 — before MOU recovery analysis,
+before consumables audit, before everything else.
+
+**V1.1 priority order:**
+1. Ombudsman submission package — print ready, correctly
+   addressed to the right regional office based on policy
+   address, complete case file with all documents in order.
+2. Multi-settlement chain linking — connect -1, -2, -3
+   settlements to show complete claim picture.
+3. Full MOU recovery analysis — identify recoverable amounts
+   from MOU discount gaps.
+4. CGO letter specific to settlement disputes.
+5. Consumables audit against IRDAI non-payable list.
+6. Document type auto-detection on second visit.
+
+**Why Ombudsman package is Priority 1:**
+This is the feature that creates real user outcomes.
+The CGO letter is a procedural step. The Ombudsman
+is where resolution actually happens. A complete,
+correctly formatted, correctly addressed Ombudsman
+submission package is what takes a policyholder from
+frustrated to empowered.
+
+This is also the feature most likely to generate
+word of mouth — "I used this tool and won at the
+Ombudsman" is the testimonial that builds Ezer.
+
+**What the Ombudsman package must include:**
+- Cover letter addressed to correct regional Ombudsman
+  office based on policy address jurisdiction
+- Statement of facts — plain English timeline of events
+- Copy of original denial letter
+- Copy of CGO complaint sent
+- Copy of CGO response received
+- Copy of policy schedule
+- Claim reference numbers
+- Amount in dispute
+- Prayer — what the policyholder is asking for
+
+All of this generated and packaged by Ezer.
+Print ready. No lawyer needed.
