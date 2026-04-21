@@ -48,6 +48,11 @@ from backend.app.analyser import analyse_rejection
 # This imports our analyse_rejection function from analyser.py
 # It takes the extracted fields and returns legal analysis
 # This connects our two core engines together
+
+from backend.app.settlement_extractor import extract_settlement_document
+# Import settlement letter extractor from settlement_extractor.py
+# Reads settlement PDFs and pulls out financials, deductions, and flags
+
 # -------------------------------------------------------
 # ENVIRONMENT SETUP
 # -------------------------------------------------------
@@ -583,4 +588,46 @@ async def extract_policy_endpoint(file: UploadFile = File(...)):
         "success": True,
         "filename": file.filename,
         "policy_data": result
+    }
+# -------------------------------------------------------
+# ENDPOINT 8: Extract Settlement Letter
+# Accepts a settlement letter PDF and returns all fields.
+# Powers the settlement audit flow from Supplement V3.
+# -------------------------------------------------------
+
+@app.post("/extract-settlement")
+async def extract_settlement_endpoint(file: UploadFile = File(...)):
+    """
+    INPUT:  A settlement letter PDF uploaded by the user.
+    OUTPUT: All extracted settlement fields as structured JSON.
+
+    Includes financial summary, line items, deductions,
+    without_prejudice flag, and consumables analysis
+    if Protector Rider is confirmed active.
+    """
+
+    if not file.filename.endswith('.pdf'):
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are accepted. Please upload a PDF settlement letter."
+        )
+
+    contents = await file.read()
+
+    with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmp_file:
+        tmp_file.write(contents)
+        tmp_file.flush()
+
+        try:
+            result = extract_settlement_document(tmp_file.name)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Settlement extraction failed: {str(e)}"
+            )
+
+    return {
+        "success": True,
+        "filename": file.filename,
+        "settlement_data": result
     }
