@@ -1,0 +1,19 @@
+{
+  "cgo_letter": {
+    "closing": {
+      "response_demand": "I request that your office provide a written, reasoned response to this formal complaint within 15 days as required under IRDAI Grievance Redressal Guidelines.",
+      "escalation_warning": "Please be advised that if a satisfactory resolution is not provided within the prescribed regulatory timeframe, I may escalate this matter to the Insurance Ombudsman under the Insurance Ombudsman Rules 2017 and to the IRDAI Grievance Cell through the IGMS portal, without further notice.",
+      "acknowledgement_request": "I request acknowledgement of receipt of this complaint within 3 working days."
+    },
+    "subject_template": "Formal Complaint Against Denial of {denial_type} Claim - Policy Number {policy_number} - CCN {ccn} - {denial_date}",
+    "salutation": "Dear Sir or Madam,",
+    "closing_salutation": "Yours faithfully,"
+  },
+  "ombudsman_letter": {
+    "closing": {
+      "response_demand": "I request that the Hon'ble Ombudsman take up this matter and direct the insurer to provide a fair and complete resolution.",
+      "no_lawyer_note": "I am representing myself in this matter and do not have legal representation.",
+      "acknowledgement_request": "I request acknowledgement of receipt of this complaint at the earliest."
+    }
+  }
+}

@@ -68,6 +68,7 @@ class PolicyDocument(BaseModel):
     # Critical rider flags - explicit because Ezer reasons about these
     protector_rider_active: bool = False
     unlimited_restore_active: bool = False
+    one_time_restore_active: bool = False
     co_payment_percentage: str = "0"
     aggregate_deductible: str = "0"
 

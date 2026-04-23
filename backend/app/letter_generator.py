@@ -483,14 +483,10 @@ Generate the complete letter now.
 
     message = client.messages.create(
     model="claude-sonnet-4-6",
-    max_tokens=1000,  # keep whatever number is already there
+    max_tokens=4000,  # keep whatever number is already there
     messages=[
         {"role": "user", "content": prompt}
     ],
-    extra_headers={
-        "anthropic-beta": "zero-data-retention-2025-02-19"
-        # Zero Data Retention — Anthropic will not store this call
-    }
 )
 
     letter_text = message.content[0].text

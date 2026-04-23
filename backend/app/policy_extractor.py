@@ -125,9 +125,13 @@ CRITICAL RULES:
 DOCUMENT FORMAT NOTES:
 This document may be one of three HDFC ERGO formats or any other Indian insurer format:
 - Optima Secure newer format uses Section B.1. references
-- Optima Secure older format uses B-1.1 references  
+- Optima Secure older format uses B-1.1 references
 - Optima Restore format uses B-1.a references
-The Customer Information Sheet / Know Your Policy section is the most reliable source for key fields across all formats.
+
+CRITICAL FOR WAITING PERIODS:
+The Customer Information Sheet / Know Your Policy section is the most reliable source for key fields across ALL formats.
+For Optima Restore format specifically, waiting period fields DO NOT appear in the main Policy Schedule. They only appear in the Customer Information Sheet section. Always look for the Customer Information Sheet section first when extracting waiting periods, moratorium period, and room rent limits.
+Search for the heading "CUSTOMER INFORMATION SHEET" or "KNOW YOUR POLICY" and extract waiting period rows from that table.
 
 EXTRACT THESE FIELDS:
 

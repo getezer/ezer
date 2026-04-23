@@ -191,10 +191,6 @@ Here is the denial letter text:
             # role: "user" means this is coming from the person asking.
             # content: prompt is the actual message text.
         ],
-        extra_headers={
-            "anthropic-beta": "zero-data-retention-2025-02-19"
-            # Zero Data Retention — Anthropic will not store this call
-        }
     )
     
     response_text = message.content[0].text
