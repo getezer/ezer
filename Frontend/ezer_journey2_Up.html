@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ezer — Journey 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1D4ED8;
+    --blue-light: #EFF6FF;
+    --black: #0F172A;
+    --grey-text: #64748B;
+    --grey-border: #E2E8F0;
+    --grey-bg: #F8FAFC;
+    --white: #FFFFFF;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: #F1F5F9;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .screen-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey-text);
+    align-self: flex-start;
+    margin-left: calc(50% - 195px);
+  }
+
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: var(--white);
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .logo {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--black);
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.5rem 1rem;
+  }
+
+  .progress-back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--grey-text);
+    font-size: 18px;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .progress-bar {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+  }
+
+  .progress-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 100px;
+    background: var(--grey-border);
+  }
+
+  .progress-seg.done { background: var(--blue); }
+  .progress-seg.active { background: var(--blue); }
+
+  .content {
+    flex: 1;
+    padding: 1rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heading {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    color: var(--black);
+    margin-bottom: 0.75rem;
+  }
+
+  .heading em { font-style: italic; color: var(--grey-text); }
+
+  .subtext {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--grey-text);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 100px;
+    padding: 14px 28px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    width: fit-content;
+    transition: opacity 0.15s;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+  .btn-primary.full { width: 100%; }
+  .btn-primary.disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--white);
+    color: var(--black);
+    border: 1px solid var(--grey-border);
+    border-radius: 100px;
+    padding: 13px 28px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s;
+  }
+
+  .btn-secondary:hover { background: var(--grey-bg); }
+
+  .bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem 1.5rem;
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--grey-text);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+  }
+
+  .upload-zone {
+    border: 1.5px dashed var(--blue);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    background: var(--blue-light);
+    margin-bottom: 1rem;
+  }
+
+  .upload-icon { width: 40px; height: 40px; color: var(--blue); }
+  .upload-label { font-size: 15px; font-weight: 500; color: var(--blue); }
+  .upload-hint { font-size: 12px; color: var(--grey-text); }
+
+  .upload-zone-optional {
+    border: 1.5px dashed var(--grey-border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    background: var(--white);
+    transition: background 0.15s;
+  }
+
+  .upload-zone-optional:hover { background: var(--grey-bg); }
+
+  .optional-left { display: flex; align-items: center; gap: 0.75rem; }
+  .optional-label { font-size: 14px; color: var(--black); font-weight: 400; }
+  .optional-hint { font-size: 12px; color: var(--grey-text); margin-top: 1px; }
+
+  .card {
+    background: var(--grey-bg);
+    border: 1px solid var(--grey-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+  }
+
+  .info-card {
+    background: var(--blue-light);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .info-card svg { flex-shrink: 0; margin-top: 2px; }
+  .info-text { font-size: 14px; color: var(--black); line-height: 1.6; }
+  .info-text strong { font-weight: 500; }
+
+  .notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: 10px;
+    background: var(--grey-bg);
+    border: 1px solid var(--grey-border);
+    font-size: 13px;
+    color: var(--grey-text);
+    line-height: 1.5;
+  }
+
+  .step-list { display: flex; flex-direction: column; gap: 0; }
+
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--grey-border);
+  }
+
+  .step-item:last-child { border-bottom: none; }
+
+  .step-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-icon.done { background: var(--blue); }
+  .step-icon.active { background: var(--blue-light); border: 2px solid var(--blue); }
+  .step-icon.pending { background: var(--grey-border); }
+
+  .step-text { font-size: 15px; color: var(--black); font-weight: 300; }
+  .step-text.done { color: var(--grey-text); }
+
+  .list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--grey-border);
+  }
+
+  .list-item:last-child { border-bottom: none; }
+
+  .list-icon {
+    width: 36px; height: 36px;
+    background: var(--blue-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--blue);
+  }
+
+  .list-content { flex: 1; }
+  .list-title { font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 2px; }
+  .list-desc { font-size: 13px; color: var(--grey-text); line-height: 1.5; font-weight: 300; }
+
+  .divider { height: 1px; background: var(--grey-border); margin: 1rem 0; }
+
+  .quote-block {
+    background: var(--blue-light);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.25rem;
+    font-size: 15px;
+    color: var(--black);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .path-card {
+    border: 1px solid var(--grey-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    cursor: pointer;
+    background: var(--white);
+    transition: background 0.15s;
+    margin-bottom: 0.75rem;
+  }
+
+  .path-card:hover { background: var(--grey-bg); }
+  .path-card.active { border-color: var(--blue); background: var(--blue-light); }
+
+  .path-icon {
+    width: 40px; height: 40px;
+    background: var(--blue-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--blue);
+  }
+
+  .path-card.active .path-icon { background: var(--blue); color: white; }
+
+  .path-title { font-size: 15px; font-weight: 500; color: var(--black); margin-bottom: 4px; }
+  .path-desc { font-size: 13px; color: var(--grey-text); line-height: 1.5; font-weight: 300; }
+
+  .consent-sheet {
+    background: var(--white);
+    border-radius: 24px 24px 0 0;
+    padding: 1.5rem;
+    border-top: 1px solid var(--grey-border);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+  }
+
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: var(--grey-border);
+    border-radius: 100px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    cursor: pointer;
+  }
+
+  .checkbox {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--blue);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    background: var(--blue);
+  }
+
+  .checkbox-label { font-size: 14px; color: var(--black); line-height: 1.5; font-weight: 300; }
+
+  .dim-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 220px;
+    background: rgba(15,23,42,0.3);
+    border-radius: 40px 40px 0 0;
+    z-index: 1;
+  }
+
+  .summary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .summary-stat {
+    background: var(--grey-bg);
+    border: 1px solid var(--grey-border);
+    border-radius: 10px;
+    padding: 0.875rem 0.5rem;
+    text-align: center;
+  }
+
+  .summary-num {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--blue);
+  }
+
+  .summary-num.neutral { color: var(--grey-text); }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--grey-text);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .issue-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--grey-border);
+    font-size: 14px;
+    color: var(--black);
+    font-weight: 300;
+  }
+
+  .issue-row:last-child { border-bottom: none; }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .tag-grey { background: var(--grey-border); color: var(--grey-text); }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+
+  .timeline { display: flex; flex-direction: column; }
+
+  .timeline-item {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .timeline-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  .timeline-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .timeline-dot.active-dot {
+    background: var(--blue-light);
+    border: 2px solid var(--blue);
+  }
+
+  .timeline-dot.pending-dot { background: var(--grey-border); }
+
+  .timeline-line {
+    width: 1px;
+    background: var(--grey-border);
+    flex: 1;
+    min-height: 16px;
+    margin: 4px 0;
+  }
+
+  .timeline-content { flex: 1; padding-bottom: 1.25rem; }
+  .timeline-title { font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 2px; }
+  .timeline-desc { font-size: 13px; color: var(--grey-text); line-height: 1.5; font-weight: 300; }
+
+  .here-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue);
+    background: var(--blue-light);
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-left: 8px;
+  }
+
+  .time-badge {
+    font-size: 11px;
+    color: var(--grey-text);
+    background: var(--grey-bg);
+    border: 1px solid var(--grey-border);
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 1 — WELCOME BACK -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 1 — Welcome Back</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="content" style="justify-content:center;">
+    <h1 class="heading">Welcome back.<br><em>What brings you here today?</em></h1>
+    <p class="subtext" style="margin-bottom:1.5rem;">Choose where you are in your journey.</p>
+
+    <div class="path-card">
+      <div class="path-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div>
+        <div class="path-title">Starting with my policy and letter</div>
+        <div class="path-desc">Upload your policy and the letter from your insurance company</div>
+      </div>
+    </div>
+
+    <div class="path-card active">
+      <div class="path-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </div>
+      <div>
+        <div class="path-title">I have a response from my insurer</div>
+        <div class="path-desc">You wrote to them and they have responded. Upload their response to continue.</div>
+      </div>
+    </div>
+
+    <div class="notice" style="margin-top:0.5rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Nothing is stored. You will need to upload your documents again.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 2 — UPLOAD INSURER RESPONSE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 2 — Upload Insurer Response</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">Upload the response from your insurer.</h2>
+    <p class="subtext">The letter or document they sent after you wrote to their grievance team or Chief Grievance Officer.</p>
+
+    <div class="upload-zone">
+      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      <span class="upload-label">Choose file</span>
+      <span class="upload-hint">PDF only</span>
+    </div>
+
+    <p style="font-size:13px;color:var(--grey-text);margin-bottom:0.75rem;font-weight:400;">You can also add earlier documents to improve accuracy</p>
+
+    <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+      <div class="upload-zone-optional">
+        <div class="optional-left">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div>
+            <div class="optional-label">Your denial letter</div>
+            <div class="optional-hint">Optional — improves accuracy</div>
+          </div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      </div>
+
+      <div class="upload-zone-optional">
+        <div class="optional-left">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div>
+            <div class="optional-label">Your policy document</div>
+            <div class="optional-hint">Optional — improves accuracy</div>
+          </div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      </div>
+    </div>
+
+    <div class="notice">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" style="flex-shrink:0;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Nothing is stored. Your documents stay with you.
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="back-link">← Back</button>
+    <button class="btn-primary">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 3 — LOADING -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 3 — Reading your documents</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">Reading your documents.</h2>
+    <p class="subtext">This usually takes 20–30 seconds.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-icon done">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="step-text done">Reading the insurer's response</span>
+      </div>
+      <div class="step-item">
+        <div class="step-icon done">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="step-text done">Identifying what they agreed and did not agree to</span>
+      </div>
+      <div class="step-item">
+        <div class="step-icon active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.5"><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="step-text">Comparing with your earlier documents</span>
+      </div>
+      <div class="step-item">
+        <div class="step-icon pending"></div>
+        <span class="step-text" style="color:#94A3B8;">Preparing your summary</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 4 — HOW YOUR INSURER RESPONDED -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 4 — How Your Insurer Responded</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">How your insurer responded.</h2>
+    <p class="subtext">Here is what we understood from their letter.</p>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">What they agreed to</div>
+          <div class="list-desc">They have acknowledged parts of your claim as valid.</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">What they did not agree to</div>
+          <div class="list-desc">They have not accepted certain parts of your claim.</div>
+        </div>
+      </div>
+      <div class="list-item" style="border-bottom:none;">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Key reasons given</div>
+          <div class="list-desc">"Patient admitted primarily for investigation" — this is the reason stated in their letter.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <p class="info-text">We will help you understand what this means and what you can do next.</p>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="back-link">← Back</button>
+    <button class="btn-primary">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 5 — WHAT YOU CAN DO NEXT -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 5 — What You Can Do Next</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">What you can do next.</h2>
+    <p class="subtext">Based on their response, here are your options.</p>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Ask for clarification</div>
+          <div class="list-desc">Write back and ask them to explain their decision in more detail.</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Share additional documents</div>
+          <div class="list-desc">Submit more evidence to support your claim.</div>
+        </div>
+      </div>
+      <div class="list-item" style="border-bottom:none;">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Take it to the Ombudsman</div>
+          <div class="list-desc">If you are not satisfied, the Insurance Ombudsman can review your case independently. No lawyer required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p class="info-text">You are not alone in this. Ezer is with you.</p>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="back-link">← Back</button>
+    <button class="btn-primary">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 6 — CONSENT SHEET -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 6 — Consent (bottom sheet)</div>
+<div class="phone" style="position:relative;">
+  <div class="dim-overlay"></div>
+  <div class="nav" style="position:relative;z-index:0;opacity:0.4;"><span class="logo">ezer</span></div>
+  <div class="content" style="opacity:0.4;">
+    <h2 class="heading" style="font-size:30px;">What you can do next.</h2>
+    <p class="subtext">Based on their response, here are your options.</p>
+  </div>
+  <div class="consent-sheet" style="z-index:2;">
+    <div class="sheet-handle"></div>
+    <h3 style="font-family:var(--font-serif);font-size:22px;font-weight:400;color:var(--black);margin-bottom:0.5rem;">Before we prepare your draft</h3>
+    <p style="font-size:14px;color:var(--grey-text);line-height:1.6;font-weight:300;">Ezer uses AI to prepare this draft based on the documents you shared. This is not legal advice. Please read it carefully before you send it.</p>
+    <div class="checkbox-row">
+      <div class="checkbox">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <span class="checkbox-label">I understand and want to continue</span>
+    </div>
+    <button class="btn-primary full">Prepare my draft →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 7 — YOUR SUMMARY -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 7 — Your Summary</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">Here is your summary.</h2>
+    <p class="subtext">Based on the insurer's response and your documents.</p>
+
+    <div class="summary-row">
+      <div class="summary-stat">
+        <div class="summary-num">3</div>
+        <div class="summary-label">Agreed</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-num" style="color:var(--grey-text);font-size:22px;">2</div>
+        <div class="summary-label">Partly agreed</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-num" style="color:var(--grey-text);font-size:22px;">2</div>
+        <div class="summary-label">Not accepted</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="list-title" style="margin-bottom:0.75rem;">Key issues</div>
+      <div class="issue-row">
+        <span>Pre-existing condition clause</span>
+        <span class="tag tag-grey">Not accepted</span>
+      </div>
+      <div class="issue-row">
+        <span>Policy waiting period</span>
+        <span class="tag tag-grey">Not accepted</span>
+      </div>
+      <div class="issue-row">
+        <span>Incomplete medical documents</span>
+        <span class="tag tag-blue">Partly agreed</span>
+      </div>
+      <div class="issue-row" style="border-bottom:none;">
+        <span>Treatment not covered</span>
+        <span class="tag tag-blue">Partly agreed</span>
+      </div>
+    </div>
+
+    <div class="info-card" style="margin-bottom:1rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <p class="info-text">We suggest approaching the Insurance Ombudsman. Your case is strong enough to take forward.</p>
+    </div>
+
+    <div style="flex:1;"></div>
+    <button class="btn-primary full">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 8 — OMBUDSMAN DRAFT READY -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 8 — Your Ombudsman Draft is Ready</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="progress">
+    <span class="progress-back">←</span>
+    <div class="progress-bar">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+    </div>
+  </div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">Your Ombudsman draft is ready.</h2>
+    <p class="subtext">Review it carefully before sending.</p>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="list-title" style="margin-bottom:0.75rem;font-size:15px;">What is included</div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Summary of your case</div>
+          <div class="list-desc">The issue, background, and the insurer's response</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Policy and document references</div>
+          <div class="list-desc">Relevant terms and conditions included</div>
+        </div>
+      </div>
+      <div class="list-item" style="border-bottom:none;">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Documents checklist</div>
+          <div class="list-desc">A list of documents to attach with your submission</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card" style="margin-bottom:1rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <p class="info-text">You will need the insurer's final response as proof when you approach the Ombudsman. This is already captured in your draft.</p>
+    </div>
+
+    <div class="notice" style="margin-bottom:1rem;font-size:12px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      This draft was prepared by AI. Please read it carefully before sending.
+    </div>
+
+    <button class="btn-primary full" style="margin-bottom:0.75rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Download your draft
+    </button>
+    <button class="btn-secondary">View full letter</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="back-link">← Back</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- J2 SCREEN 9 — YOU ARE ALL SET -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen-label">J2 Screen 9 — You Are All Set</div>
+<div class="phone">
+  <div class="nav"><span class="logo">ezer</span></div>
+  <div class="content">
+    <h2 class="heading" style="font-size:30px;">You are all set.<br><em>The next step is yours.</em></h2>
+    <p class="subtext">Your Ombudsman draft is ready. You decide when and how to submit it.</p>
+
+    <div class="info-card" style="margin-bottom:1rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p class="info-text"><strong>You stay in control.</strong> We do not send anything on your behalf.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="list-title" style="margin-bottom:0.75rem;">Before you submit</div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Review your draft</div>
+          <div class="list-desc">Read it carefully. Edit anything that needs changing.</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Gather your supporting documents</div>
+          <div class="list-desc">Use the checklist in your draft as your guide.</div>
+        </div>
+      </div>
+      <div class="list-item">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Submit to the Ombudsman</div>
+          <div class="list-desc">Send your draft and supporting documents to the Insurance Ombudsman office.</div>
+        </div>
+      </div>
+      <div class="list-item" style="border-bottom:none;">
+        <div class="list-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </div>
+        <div class="list-content">
+          <div class="list-title">Keep a copy for your records</div>
+          <div class="list-desc">Download your case file below.</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary full" style="margin-bottom:1rem;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Download your case file
+    </button>
+
+    <div class="notice">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Ezer's work is done. The next step is yours.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

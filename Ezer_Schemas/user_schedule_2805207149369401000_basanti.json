@@ -1,0 +1,179 @@
+{
+  "_schema_meta": {
+    "version": "1.0",
+    "ezer_tier": "Tier 2 — User Schedule",
+    "product_id": "HDFC_ERGO_OPTIMA_RESTORE_V2526",
+    "product_library_ref": "product_library_hdfc_optima_restore.json",
+    "policy_number": "2805207149369401000",
+    "last_curated_by": "human",
+    "last_curated_date": "2026-04-28",
+    "source_document": "Policy Schedule — Basanti Satapathy — Period 02/02/2026 to 01/02/2027",
+    "notes": "User-specific schedule data only. Product rules are in product_library_hdfc_optima_restore.json. Derived insights are computed at runtime by the Ezer Insight Engine by joining this file with the product library."
+  },
+
+  "policy_meta": {
+    "insured_name": "Basanti Satapathy",
+    "insured_relationship_to_account_holder": "Mother of Badal Satapathy",
+    "date_of_birth": "15/05/1959",
+    "age_at_policy_start": 66,
+    "gender": "Female",
+    "member_id": "202001152800047",
+    "policyholder_name": "Gupta Prasad Satapathy",
+    "policy_number": "2805207149369401000",
+    "first_inception_date": "02/02/2016",
+    "policy_period_from": "02/02/2026",
+    "policy_period_to": "01/02/2027",
+    "policy_issuance_date": "06/02/2026",
+    "months_continuous_coverage": 120,
+    "issuing_office": "2nd Floor, OSCU Complex, Samabaya Bhawan, Unit 9, Janpath, Khorda",
+    "intermediary_name": "Agent: Sujit Kumar Das",
+    "intermediary_code": "201640291947",
+    "nominee_name": "Badal Satapathy",
+    "nominee_relationship": "Son"
+  },
+
+  "sum_insured": {
+    "base_si_inr": 1500000,
+    "base_si_composition": {
+      "original_si_inr": 1000000,
+      "original_si_inception_date": "02/02/2016",
+      "enhancement_1_inr": 500000,
+      "enhancement_1_year": "2025-26",
+      "enhancement_1_date_approximate": "February 2026 renewal"
+    },
+    "multiplier_benefit_si_inr": 1500000,
+    "multiplier_benefit_status": "fully_accrued",
+    "multiplier_benefit_note": "10 years continuous coverage — Multiplier has reached 100% maximum on the original ₹10L. The enhanced ₹5L Multiplier will accrue over time.",
+    "total_si_inr": 3000000,
+    "unlimited_restore_active": false,
+    "co_payment_pct": 0,
+    "deductible_inr": 0,
+    "per_claim_ceiling_inr": 3000000,
+    "per_claim_ceiling_note": "Single claim cannot exceed Base SI + Multiplier Benefit = ₹30L.",
+    "effective_annual_coverage_inr": 4500000,
+    "effective_annual_coverage_note": "Base ₹15L + Multiplier ₹15L + one Restore trigger ₹15L = ₹45L maximum across multiple claims in a policy year"
+  },
+
+  "waiting_periods": {
+    "overall_status": "partial — original ₹10L fully served, enhanced ₹5L has running waiting periods",
+    "si_blocks": [
+      {
+        "block_id": "original_10L",
+        "si_inr": 1000000,
+        "inception_date": "02/02/2016",
+        "si_enhanced": false,
+        "initial_30_day_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage"
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage — 24 months fully served"
+        },
+        "ped_36_month_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage — 36 months fully served"
+        }
+      },
+      {
+        "block_id": "enhanced_5L_added_25_26",
+        "si_inr": 500000,
+        "enhancement_date_approximate": "February 2026",
+        "si_enhanced": true,
+        "initial_30_day_waiting": {
+          "status": "waived",
+          "reason": "Continuous renewal — 30-day waiting waived per Section C.1.i"
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "running",
+          "remaining_months_approximate": 12,
+          "approximate_expiry": "February 2027",
+          "clause_ref": "C1(ii)"
+        },
+        "ped_36_month_waiting": {
+          "status": "running",
+          "remaining_months_approximate": 24,
+          "approximate_expiry": "February 2028",
+          "clause_ref": "C1(iii)",
+          "ped_affected": "Hypertension — waiting period on this ₹5L block expires approximately February 2028"
+        }
+      }
+    ],
+    "schedule_integrity_flags": [
+      {
+        "flag_type": "SCHEDULE_INTEGRITY_ERROR",
+        "priority": "HIGH",
+        "description": "The exclusion table in the issued policy schedule shows THREE SI blocks — two ₹5L rows and one ₹10L row. Only one ₹5L enhancement was done in 25-26. The middle ₹5L block (showing C1(i) and C1(ii) waived, C1(iii) reduced to 1 year) has no corresponding real SI enhancement and is an underwriting error. This phantom block could be used at claim time to create confusion about applicable waiting periods.",
+        "correct_structure": "₹10L block — all waiting periods waived. ₹5L enhanced block — C1(i) waived, C1(ii) approximately 1 year remaining, C1(iii) approximately 2 years remaining.",
+        "recommended_action": "Flag to HDFC ERGO for schedule correction. Ezer to generate Schedule Integrity Alert and draft insurer correction request."
+      }
+    ]
+  },
+
+  "declared_peds": [
+    {
+      "condition_name": "Hypertension",
+      "icd_code": "I10",
+      "icd_description": "Essential (primary) hypertension",
+      "declared_at": "inception_2016",
+      "declaration_method": "proposal_form",
+      "waiting_period_by_block": {
+        "original_10L": {
+          "status": "waived",
+          "currently_covered": true,
+          "coverage_note": "Fully covered on original ₹10L. Claimable today."
+        },
+        "enhanced_5L": {
+          "status": "running",
+          "remaining_months_approximate": 24,
+          "approximate_expiry": "February 2028",
+          "currently_covered": false,
+          "coverage_note": "Hypertension claims on the enhanced ₹5L block are not claimable until approximately February 2028."
+        }
+      }
+    }
+  ],
+
+  "addons_active": {
+    "unlimited_restore": false,
+    "protector_rider": false,
+    "aggregate_deductible": false,
+    "co_payment": false,
+    "optima_wellbeing": false,
+    "hospital_daily_cash_rider": false,
+    "critical_advantage_rider": false
+  },
+
+  "premium": {
+    "net_premium_inr": 64900,
+    "discount_inr": 0,
+    "loading_inr": 0,
+    "gross_premium_inr": 64900,
+    "policy_period": "02/02/2026 to 01/02/2027",
+    "section_80d_certificate_amount_inr": 64900
+  },
+
+  "schedule_of_benefits": {
+    "in_patient_treatment_limit_inr": 1500000,
+    "pre_hospitalisation_days": 60,
+    "post_hospitalisation_days": 180,
+    "day_care_procedures_limit_inr": 1500000,
+    "domiciliary_treatment_limit_inr": 1500000,
+    "organ_donor_limit_inr": 1500000,
+    "daily_cash_shared_accommodation_per_day_inr": 800,
+    "daily_cash_shared_accommodation_maximum_inr": 4800,
+    "ambulance_per_hospitalisation_inr": 2000,
+    "emergency_air_ambulance": "Covered upto Rs. 2.5L per hospitalisation, maximum upto SI in a year",
+    "e_opinion_critical_illness": "One per policy year",
+    "restore_benefit": "100% of Basic SI — for any illness or any insured person",
+    "multiplier_benefit": "50% of Basic SI post each policy year irrespective of claims, maximum 100%",
+    "preventive_health_checkup_per_person_inr": 4000
+  },
+
+  "special_conditions": {
+    "declared_peds_on_schedule": ["Hypertension_1"],
+    "permanent_exclusions": [],
+    "loading_applied": false,
+    "waiting_period_waivers": "Original ₹10L — all waiting periods fully waived. Enhanced ₹5L — C1(i) waived, C1(ii) and C1(iii) running."
+  }
+}

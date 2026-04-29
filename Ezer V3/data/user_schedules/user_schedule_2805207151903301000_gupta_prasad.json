@@ -1,0 +1,173 @@
+{
+  "_schema_meta": {
+    "version": "1.0",
+    "ezer_tier": "Tier 2 — User Schedule",
+    "product_id": "HDFC_ERGO_OPTIMA_RESTORE_V2526",
+    "product_library_ref": "product_library_hdfc_optima_restore.json",
+    "policy_number": "2805207151903301000",
+    "last_curated_by": "human",
+    "last_curated_date": "2026-04-28",
+    "source_document": "Policy Schedule — Gupta Prasad Satapathy — Period 01/02/2026 to 31/01/2027",
+    "notes": "User-specific schedule data only. Product rules are in product_library_hdfc_optima_restore.json. Derived insights are computed at runtime by the Ezer Insight Engine by joining this file with the product library."
+  },
+
+  "policy_meta": {
+    "insured_name": "Gupta Prasad Satapathy",
+    "insured_relationship_to_account_holder": "Father of Badal Satapathy",
+    "date_of_birth": "15/09/1948",
+    "age_at_policy_start": 77,
+    "gender": "Male",
+    "member_id": "202001142832766",
+    "policyholder_name": "Badal Satapathy",
+    "policy_number": "2805207151903301000",
+    "first_inception_date": "01/02/2016",
+    "policy_period_from": "01/02/2026",
+    "policy_period_to": "31/01/2027",
+    "policy_issuance_date": "31/01/2026",
+    "months_continuous_coverage": 120,
+    "issuing_office": "2nd Floor, OSCU Complex, Samabaya Bhawan, Unit 9, Janpath, Khorda",
+    "intermediary_name": "Agent: Sujit Kumar Das",
+    "intermediary_code": "201640291947",
+    "nominee_name": "Badal Satapathy",
+    "nominee_relationship": "Son"
+  },
+
+  "sum_insured": {
+    "base_si_inr": 1000000,
+    "multiplier_benefit_si_inr": 1000000,
+    "multiplier_benefit_status": "fully_accrued",
+    "multiplier_benefit_note": "10 years continuous coverage — Multiplier has reached 100% maximum. No further growth possible.",
+    "total_si_inr": 2000000,
+    "unlimited_restore_active": false,
+    "co_payment_pct": 0,
+    "deductible_inr": 0,
+    "per_claim_ceiling_inr": 2000000,
+    "per_claim_ceiling_note": "Single claim cannot exceed Base SI + Multiplier Benefit = ₹20L. If base exhausted, Restore gives another ₹10L for subsequent claims but per-claim cap still applies.",
+    "effective_annual_coverage_inr": 3000000,
+    "effective_annual_coverage_note": "Base ₹10L + Multiplier ₹10L + one Restore trigger ₹10L = ₹30L maximum across multiple claims in a policy year"
+  },
+
+  "waiting_periods": {
+    "overall_status": "all_fully_served",
+    "months_continuous_coverage": 120,
+    "si_blocks": [
+      {
+        "block_id": "original_10L",
+        "si_inr": 1000000,
+        "inception_date": "01/02/2016",
+        "si_enhanced": false,
+        "initial_30_day_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage"
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage — 24 months fully served"
+        },
+        "ped_36_month_waiting": {
+          "status": "waived",
+          "reason": "10 years continuous coverage — 36 months fully served"
+        }
+      }
+    ],
+    "schedule_integrity_flags": []
+  },
+
+  "declared_peds": [
+    {
+      "condition_name": "Hypertension",
+      "icd_code": "I10",
+      "icd_description": "Essential (primary) hypertension",
+      "declared_at": "inception_2016",
+      "declaration_method": "proposal_form",
+      "waiting_period_status": "fully_served",
+      "currently_covered": true,
+      "coverage_note": "Fully covered on entire ₹10L base SI. No restrictions."
+    },
+    {
+      "condition_name": "Type 2 Diabetes Mellitus",
+      "icd_codes": [
+        {"code": "E11.0", "description": "Non-insulin-dependent diabetes mellitus with coma"},
+        {"code": "E11.1", "description": "Non-insulin-dependent diabetes mellitus with ketoacidosis"},
+        {"code": "E11.2", "description": "Non-insulin-dependent diabetes mellitus with renal complications"},
+        {"code": "E11.3", "description": "Non-insulin-dependent diabetes mellitus with ophthalmic complications"},
+        {"code": "E11.4", "description": "Non-insulin-dependent diabetes mellitus with neurological complications"},
+        {"code": "E11.5", "description": "Non-insulin-dependent diabetes mellitus with peripheral circulatory complications"},
+        {"code": "E11.6", "description": "Non-insulin-dependent diabetes mellitus with other specified complications"},
+        {"code": "E11.7", "description": "Non-insulin-dependent diabetes mellitus with multiple complications"},
+        {"code": "E11.8", "description": "Non-insulin-dependent diabetes mellitus with unspecified complications"},
+        {"code": "E11.9", "description": "Non-insulin-dependent diabetes mellitus without complications"},
+        {"code": "E11", "description": "Non-insulin-dependent diabetes mellitus"}
+      ],
+      "declared_at": "inception_2016",
+      "declaration_method": "proposal_form",
+      "waiting_period_status": "fully_served",
+      "currently_covered": true,
+      "coverage_note": "All ICD-10 sub-codes explicitly accepted. Diabetic nephropathy, retinopathy, neuropathy, vascular disease all within scope."
+    },
+    {
+      "condition_name": "Other disorders of heart",
+      "icd_codes": [
+        {"code": "unspecified", "description": "Other heart disorders in diseases classified elsewhere"},
+        {"code": "unspecified", "description": "Other and unspecified disorders of circulatory system"}
+      ],
+      "icd_specificity": "none — HDFC ERGO confirmed no specific ICD code available for this condition",
+      "declared_at": "mid_policy_endorsement_2025",
+      "declaration_method": "endorsement",
+      "endorsement_context": "Condition discovered during Urolift surgery hospitalisation July 2025. Mid-policy endorsement forced by Badal Satapathy. HDFC ERGO initially reluctant but endorsement completed.",
+      "waiting_period_status": "moratorium_active — insurer cannot deny on non-disclosure grounds",
+      "currently_covered": true,
+      "coverage_note": "Insurer explicitly accepted via endorsement. Moratorium (10 years active) prevents non-disclosure denial. ICD codes are vague catch-all — written confirmation of broad coverage scope should be obtained before cardiac hospitalisation.",
+      "ezer_flags": [
+        {
+          "flag_type": "PED_ICD_VAGUENESS",
+          "priority": "HIGH",
+          "description": "HDFC ERGO confirmed no specific ICD code exists. Catch-all acceptance is broad but unspecific. At claim time for a specific cardiac event, insurer may attempt to argue specificity mismatch. Obtain written confirmation of broad scope coverage."
+        }
+      ]
+    }
+  ],
+
+  "addons_active": {
+    "unlimited_restore": false,
+    "protector_rider": false,
+    "aggregate_deductible": false,
+    "co_payment": false,
+    "optima_wellbeing": false,
+    "hospital_daily_cash_rider": false,
+    "critical_advantage_rider": false
+  },
+
+  "premium": {
+    "net_premium_inr": 81000,
+    "discount_inr": 2025,
+    "loading_inr": 0,
+    "gross_premium_inr": 78975,
+    "policy_period": "01/02/2026 to 31/01/2027",
+    "section_80d_certificate_amount_inr": 78975
+  },
+
+  "schedule_of_benefits": {
+    "in_patient_treatment_limit_inr": 1000000,
+    "pre_hospitalisation_days": 60,
+    "post_hospitalisation_days": 180,
+    "day_care_procedures_limit_inr": 1000000,
+    "domiciliary_treatment_limit_inr": 1000000,
+    "organ_donor_limit_inr": 1000000,
+    "daily_cash_shared_accommodation_per_day_inr": 800,
+    "daily_cash_shared_accommodation_maximum_inr": 4800,
+    "ambulance_per_hospitalisation_inr": 2000,
+    "emergency_air_ambulance": "Covered upto Rs. 2.5L per hospitalisation, maximum upto SI in a year",
+    "e_opinion_critical_illness": "One per policy year",
+    "restore_benefit": "100% of Basic SI — for any illness or any insured person",
+    "multiplier_benefit": "50% of Basic SI post each policy year irrespective of claims, maximum 100%",
+    "preventive_health_checkup_per_person_inr": 2000
+  },
+
+  "special_conditions": {
+    "declared_peds_on_schedule": ["Hypertension_1", "Type 2 Diabetes Mellitus_1", "Other disorders of heart"],
+    "permanent_exclusions": [],
+    "loading_applied": false,
+    "waiting_period_waivers": "All waiting periods fully waived — 10 years continuous coverage"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "_schema_meta": {
+    "version": "1.0",
+    "product_id": "HDFC_ERGO_OPTIMA_RESTORE_V2526",
+    "product_name": "Optima Restore Individual",
+    "insurer": "HDFC ERGO General Insurance Company Limited",
+    "uin": "HDFHLIP26055V102526",
+    "geography": "India Only",
+    "policy_type": "Individual",
+    "last_curated_by": "human",
+    "last_curated_date": "2026-04-28",
+    "source_document": "Policy Wording — Optima Restore HDFHLIP26055V102526",
+    "ezer_tier": "Tier 1 — Verified Library",
+    "notes": "Pure product rules. No user data. Shared across every user who uploads an Optima Restore policy. Optima Restore differs from Optima Secure in three critical ways: (1) No Protect Benefit — Annexure I consumables are explicitly excluded. (2) No Secure Benefit — no additional SI pool. (3) Multiplier Benefit replaces Plus Benefit — same 50% accrual mechanics but different name. Restore benefit mechanics are also different from Optima Secure — base restore is once per year only."
+  },
+
+  "room_rent": {
+    "rule": "at_actuals",
+    "cap_per_day_inr": null,
+    "cap_as_pct_of_si": null,
+    "icu_rule": "at_actuals",
+    "icu_cap_per_day_inr": null,
+    "proportionate_deduction_applies": false,
+    "clause": "Section B.1.a — Schedule of Benefits",
+    "insight": "No room rent cap. Any room category can be chosen without triggering proportionate deduction on the entire bill. Most policies cap room at 1% of SI per day and penalise the whole bill if exceeded — this one does not.",
+    "confidence_tier": "verified"
+  },
+
+  "waiting_periods": {
+    "initial_waiting_days": {
+      "value": 30,
+      "exceptions": ["accidents covered from day 1", "waived on continuous renewal beyond 12 months"],
+      "clause": "Section C.1.i — Code Excl03",
+      "insight": "30-day initial waiting applies only at first inception. Waived on continuous renewal. Accidents covered from day 1.",
+      "confidence_tier": "verified"
+    },
+    "specific_disease_waiting": {
+      "base_months": 24,
+      "exceptions": ["accidents exempt", "cancer as underlying cause exempt"],
+      "enhanced_si_note": "Waiting period applies afresh only to the extent of enhanced sum insured",
+      "interaction_with_ped": "If a specified disease also qualifies as PED, the longer of the two waiting periods applies",
+      "illnesses": [
+        "Sinusitis", "Rhinitis", "Tonsillitis",
+        "Cysts and polyps including breast lumps", "Polycystic ovarian diseases",
+        "Fibromyoma", "Adenomyosis", "Endometriosis", "Prolapsed Uterus",
+        "Non infective arthritis", "Gout and Rheumatism", "Osteoporosis",
+        "Ligament, Tendon and Meniscal tear", "Prolapsed inter vertebral disk",
+        "Cholelithiasis", "Cholecystitis", "Pancreatitis",
+        "Fissure/fistula in anus", "Haemorrhoids", "Pilonidal sinus",
+        "Gastro Esophageal Reflux Disorder (GERD)",
+        "Ulcer and erosion of stomach and duodenum",
+        "Cirrhosis (Alcoholic cirrhosis is permanently excluded)",
+        "Perineal and Perianal Abscess", "Rectal Prolapse",
+        "Calculus diseases of Urogenital system including Kidney, ureter, bladder stones",
+        "Benign Hyperplasia of prostate", "Varicocele",
+        "Cataract", "Retinal detachment", "Glaucoma",
+        "Benign tumors of Non infectious etiology — cysts, nodules, polyps, lump, growth"
+      ],
+      "surgical_procedures": [
+        "Adenoidectomy", "Mastoidectomy", "Tonsillectomy", "Tympanoplasty",
+        "Surgery for Nasal septum deviation", "Surgery for Turbinate hypertrophy",
+        "Nasal concha resection", "Nasal polypectomy",
+        "Hysterectomy",
+        "Joint replacement surgeries",
+        "Cholecystectomy", "Surgery of hernia",
+        "Surgery on prostate", "Surgery for Hydrocele/Rectocele",
+        "Surgery of varicose veins and varicose ulcers"
+      ],
+      "clause": "Section C.1.ii — Code Excl02 — Policy Wording Pages 19-21",
+      "insight": "24 months waiting from first inception for listed conditions — regardless of whether pre-existing. Key conditions buyers miss: cataract, kidney stones, hernia, gallbladder, joint replacement, piles surgery, prostate surgery, sinusitis. Enhanced SI restarts this clock only for the enhanced portion.",
+      "confidence_tier": "verified"
+    },
+    "ped_waiting": {
+      "base_months": 36,
+      "exceptions": ["waived per schedule if portability or continuity credit applies"],
+      "enhanced_si_note": "Waiting period applies afresh only to the extent of enhanced sum insured",
+      "clause": "Section C.1.iii — Code Excl01",
+      "insight": "Pre-existing diseases have a 36-month waiting period from first inception. Portability and continuity credit can reduce this. Enhanced SI restarts the clock only on the enhanced portion.",
+      "confidence_tier": "verified"
+    },
+    "counted_from": "first_policy_inception_date",
+    "fresh_waiting_on_enhanced_si": true
+  },
+
+  "restore_benefit": {
+    "base_restore": {
+      "type": "automatic",
+      "restore_amount": "100% of Basic Sum Insured",
+      "trigger": "complete or partial utilisation of existing Policy Sum Insured and Multiplier Benefit during the Policy Year",
+      "times_per_year": 1,
+      "same_disease_same_year": true,
+      "single_claim_cap": "A single claim in a Policy Year cannot exceed the sum of Basic Sum Insured and Multiplier Benefit",
+      "expiry": "Restored SI expires if not utilised in the same policy year",
+      "family_floater_note": "In Family Floater policies, Restore SI is available on floater basis for all insured persons",
+      "clause": "Section B.2.a — Policy Wording Page 14",
+      "insight": "Base Restore automatically adds 100% of Basic SI once per year when SI is exhausted or partially used. Restored amount is available for any illness including same disease in the same year. However a single claim cannot exceed Base + Multiplier combined — this is the per-claim ceiling.",
+      "confidence_tier": "verified"
+    },
+    "unlimited_restore_addon": {
+      "type": "optional_addon",
+      "must_be_opted": true,
+      "restore_amount": "100% of Basic Sum Insured",
+      "trigger": "complete or partial utilisation of Restore benefit or Unlimited Restore benefit during Policy Year",
+      "times_per_year": "unlimited",
+      "single_claim_cap": "A single claim cannot exceed Basic Sum Insured + Multiplier Benefit",
+      "clause": "Section B.2.b — Policy Wording Page 14",
+      "insight": "Unlimited Restore must be explicitly opted — it is NOT default. It triggers unlimited times in a policy year after base Restore is used. If not opted, restore is once per year only.",
+      "confidence_tier": "verified"
+    }
+  },
+
+  "multiplier_benefit": {
+    "type": "renewal_bonus",
+    "accrual": "irrespective of claims",
+    "amount_per_year": "50% of Basic Sum Insured of expiring policy",
+    "maximum": "100% of Basic Sum Insured",
+    "reset_on_lapse": true,
+    "note": "This is NOT a no-claim bonus. It accrues whether or not claims were made. Once added it carries forward to subsequent policy years subject to no break in policy.",
+    "clause": "Section B.4 — Policy Wording Page 18",
+    "insight": "Multiplier Benefit grows SI by 50% at each renewal regardless of claims, capped at 100% of Basic SI. After 2 years with no SI reduction, the Multiplier is fully accrued and locked. A lapse resets this.",
+    "confidence_tier": "verified"
+  },
+
+  "consumables_coverage": {
+    "base_hospitalization_covers": [
+      "Medicines, drugs and consumables — as part of in-patient treatment",
+      "Surgical appliances",
+      "Blood, oxygen, anaesthesia"
+    ],
+    "annexure_i_excluded": true,
+    "annexure_i_item_count": 68,
+    "annexure_i_key_items": [
+      "Gloves", "Masks", "Syringes", "Diapers", "Crepe bandage",
+      "Attendant charges", "PPE", "Nebulizer kit", "Oxygen mask",
+      "Sanitary pad", "Thermometer", "Ambulance equipment",
+      "Sugar free tablets", "ECG electrodes", "Vasofix safety"
+    ],
+    "protector_rider_available": true,
+    "protector_rider_note": "Protector Rider is an optional add-on that covers Annexure I excluded items. Must be explicitly opted.",
+    "ezer_comparison_note": "Optima Restore EXCLUDES Annexure I items. Optima Secure INCLUDES them via Protect Benefit (default ON). This is one of the most significant product differences between the two HDFC ERGO products.",
+    "clause": "Section B.1.a + Annexure I — Policy Wording Pages 11 and 47",
+    "insight": "Consumables coverage on Optima Restore is significantly weaker than Optima Secure. Annexure I items — gloves, syringes, masks, diapers, PPE, attendant charges and 60+ others — are NOT covered and will be deducted from every claim settlement. Budget ₹10,000-30,000 extra out-of-pocket per hospitalisation. The Protector Rider covers these but must be explicitly opted.",
+    "confidence_tier": "verified"
+  },
+
+  "pre_hospitalization": {
+    "days": 60,
+    "clause": "Section B.1.b",
+    "confidence_tier": "verified"
+  },
+
+  "post_hospitalization": {
+    "days": 180,
+    "clause": "Section B.1.c",
+    "insight": "180 days post-discharge coverage — significantly better than the industry standard of 60-90 days. Keep all post-discharge receipts and file one consolidated claim before the 180-day window closes.",
+    "confidence_tier": "verified"
+  },
+
+  "preventive_health_checkup": {
+    "basis": "per insured person, at end of each year at renewal",
+    "amount_by_base_si": {
+      "3L": "Not applicable",
+      "5L": "Rs. 1,500 per insured person — once at end of every 2 continuous policy years",
+      "10L": "Rs. 2,000 per insured person — at end of each year at renewal",
+      "15L": "Rs. 4,000 per insured person — at end of each year at renewal",
+      "20L_25L_50L_100L": "Rs. 5,000 per insured person — at end of each year at renewal"
+    },
+    "claimable_timing": "After policy renews — NOT during current policy year",
+    "carry_forward": false,
+    "clause": "Section B.3 — Policy Wording Pages 17-18",
+    "insight": "Health checkup benefit is claimable only after renewal — not during the current year. Does not carry forward if unclaimed. Get checkup done before renewal date and claim it in the first months of the renewed policy.",
+    "confidence_tier": "verified"
+  },
+
+  "daily_cash_shared_accommodation": {
+    "amount_per_day_by_si": {
+      "3L_to_15L": "Rs. 800 per day, maximum Rs. 4,800",
+      "20L_and_above": "Rs. 1,000 per day, maximum Rs. 6,000"
+    },
+    "condition": "Hospitalised in shared accommodation in a Network Hospital, hospitalisation exceeds 48 hours",
+    "clause": "Section B.1.h",
+    "confidence_tier": "verified"
+  },
+
+  "ambulance": {
+    "road_ambulance_per_hospitalisation_inr": 2000,
+    "emergency_air_ambulance": {
+      "available_from_si": "10L and above",
+      "limit_per_hospitalisation_inr": 250000,
+      "annual_limit": "upto sum insured",
+      "conditions": [
+        "Emergency life-threatening condition",
+        "Medical evacuation prescribed by Medical Practitioner",
+        "Insured person in India, treatment in India only",
+        "Air ambulance provider registered in India"
+      ]
+    },
+    "clause": "Section B.1.g and B.1.j — Policy Wording Pages 12-13",
+    "confidence_tier": "verified"
+  },
+
+  "moratorium_period": {
+    "months": 60,
+    "effect": "After 60 continuous months of coverage, insurer cannot contest policy or claim on grounds of non-disclosure or misrepresentation — except for proven fraud and permanent exclusions specified in the policy",
+    "what_moratorium_does_not_close": [
+      "Medical necessity denial",
+      "Excluded procedure denial",
+      "Reasonable and customary charge disputes",
+      "Procedural non-compliance denial",
+      "Proven fraud"
+    ],
+    "enhanced_si_note": "60-month clock restarts from date of enhancement only for the enhanced SI portion",
+    "clause": "Section D.1.k — Policy Wording Page 29",
+    "confidence_tier": "verified"
+  },
+
+  "cashless_process": {
+    "planned_admission_notice": "48 hours prior to admission",
+    "emergency_admission_notice": "Within 24 hours of admission",
+    "preauthorization_tat": "Decision within 1 hour of request receipt",
+    "final_bill_authorization_tat": "Within 3 hours of discharge request from hospital",
+    "reimbursement_settlement_tat": "30 days from last necessary document received",
+    "reimbursement_internal_verification_tat": "45 days maximum",
+    "clause": "Section D — Customer Information Sheet",
+    "confidence_tier": "verified"
+  },
+
+  "sum_insured_utilization_sequence": {
+    "order": [
+      "1. Aggregate Deductible (if applicable)",
+      "2. Co-payment (if applicable)",
+      "3. Basic Sum Insured",
+      "4. Multiplier Benefit (if applicable and available)",
+      "5. Restore Benefit",
+      "6. Unlimited Restore (if opted)"
+    ],
+    "clause": "Section D.2.l — Policy Wording Page 40",
+    "confidence_tier": "verified"
+  },
+
+  "key_exclusions": {
+    "standard_general": [
+      "Investigation and evaluation only admissions — Code Excl04",
+      "Rest cure, rehabilitation, respite care — Code Excl05",
+      "Obesity surgery not meeting BMI criteria — Code Excl06",
+      "Cosmetic or plastic surgery — Code Excl08",
+      "Hazardous or adventure sports as professional — Code Excl09",
+      "Alcoholism, drug or substance abuse — Code Excl12",
+      "Treatments in health hydros, nature cure clinics, spas — Code Excl13",
+      "Dietary supplements without prescription — Code Excl14",
+      "Refractive error less than 7.5 dioptres — Code Excl15",
+      "Unproven treatments — Code Excl16",
+      "Sterility and infertility — Code Excl17",
+      "Maternity — Code Excl18"
+    ],
+    "specific_general": [
+      "Sleep apnoea — C.3.12",
+      "Dental treatment unless requiring hospitalisation — C.3.23",
+      "Treatment outside India — C.3.5",
+      "External congenital diseases — C.3.13",
+      "Hearing aids, spectacles, contact lenses — C.3.11",
+      "Preventive care and vaccination — C.3.10",
+      "Prosthetic devices removable without surgery — C.3.4",
+      "Annexure I non-medical items — 68 items explicitly excluded — C.3.16"
+    ],
+    "clause": "Section C.2 and C.3 — Policy Wording Pages 21-25",
+    "confidence_tier": "verified"
+  },
+
+  "optional_addons_available": [
+    "Unlimited Restore Benefit — B.2.b",
+    "Aggregate Deductible — B.2.c",
+    "Co-Payment — B.2.d",
+    "Protector Rider — covers Annexure I excluded items",
+    "Optima Wellbeing — outpatient benefits",
+    "ABCD Chronic Care — hospitalization for Asthma, BP, Cholesterol, Diabetes after 30-day wait",
+    "Limitless — infinite value claims up to specified number",
+    "Parenthood — maternity, IVF, embryo storage after 2-year wait",
+    "Individual Personal Accident Rider",
+    "Hospital Daily Cash Rider",
+    "Critical Advantage Rider — planned treatment abroad for 8 major illnesses",
+    "my:health Critical Illness — 50 critical illnesses"
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "_schema_meta": {
+    "version": "1.0",
+    "ezer_tier": "Tier 2 — User Schedule",
+    "product_id": "HDFC_ERGO_OPTIMA_SECURE_V2425",
+    "product_library_ref": "product_library_hdfc_optima_secure.json",
+    "policy_number": "2856205213169603000",
+    "last_curated_by": "human",
+    "last_curated_date": "2026-04-28",
+    "source_document": "Policy Schedule — Badal Satapathy — Period 05/02/2026 to 04/02/2027",
+    "notes": "User-specific schedule data only. Product rules are in product_library_hdfc_optima_secure.json. Derived insights are computed at runtime by the Ezer Insight Engine by joining this file with the product library."
+  },
+
+  "policy_meta": {
+    "insured_name": "Badal Satapathy",
+    "insured_relationship_to_account_holder": "Self",
+    "date_of_birth": "1978-06-20",
+    "age_at_policy_start": 47,
+    "gender": "Male",
+    "policyholder_name": "Badal Satapathy",
+    "policy_number": "2856205213169603000",
+    "previous_policy_number": "2856205213169602000",
+    "first_inception_date": "2016-02-02",
+    "policy_period_from": "2026-02-05",
+    "policy_period_to": "2027-02-04",
+    "policy_issuance_date": "2026-01-31",
+    "months_continuous_coverage": 121,
+    "renewal": true,
+    "premium_tier": "Tier 2",
+    "place_of_supply": "Odisha",
+    "nominee_name": "Mrs Basanti Satapathy",
+    "nominee_relation": "Mother"
+  },
+
+  "sum_insured": {
+    "base_si_inr": 2500000,
+    "plus_benefit_si_inr": 2500000,
+    "plus_benefit_status": "fully_accrued",
+    "plus_benefit_note": "10+ years continuous coverage — Plus Benefit has reached 100% maximum. No further growth possible.",
+    "secure_benefit_si_inr": 2500000,
+    "total_si_inr": 5000000,
+    "unlimited_restore_active": true,
+    "per_claim_ceiling_note": "With Unlimited Restore active, SI is restored unlimited times. Single claim cannot exceed Base SI + Plus Benefit + Secure Benefit per policy wording.",
+    "effective_annual_coverage_note": "₹25L base + ₹25L Secure Benefit + unlimited Restore of ₹25L each time = effectively uncapped for multiple admissions",
+    "aggregate_deductible_inr": 0,
+    "co_payment_pct": 0
+  },
+
+  "waiting_periods": {
+    "overall_status": "partial — ₹10L block fully waived, two ₹5L blocks have running waiting periods",
+    "si_blocks": [
+      {
+        "block_id": "block_5L_a",
+        "si_inr": 500000,
+        "initial_30_day_waiting": {
+          "status": "waived",
+          "remaining_months": 0
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "running",
+          "remaining_months": 12
+        },
+        "ped_36_month_waiting": {
+          "status": "running",
+          "remaining_months": 24,
+          "remaining_is_remaining_not_total": true
+        }
+      },
+      {
+        "block_id": "block_10L",
+        "si_inr": 1000000,
+        "initial_30_day_waiting": {
+          "status": "waived"
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "waived"
+        },
+        "ped_36_month_waiting": {
+          "status": "waived"
+        }
+      },
+      {
+        "block_id": "block_5L_b",
+        "si_inr": 500000,
+        "initial_30_day_waiting": {
+          "status": "waived",
+          "remaining_months": 0
+        },
+        "specific_disease_24_month_waiting": {
+          "status": "waived",
+          "remaining_months": 0,
+          "specific_waiting_waived": true
+        },
+        "ped_36_month_waiting": {
+          "status": "running",
+          "remaining_months": 12,
+          "remaining_is_remaining_not_total": true
+        }
+      }
+    ],
+    "schedule_integrity_flags": [],
+    "source": "Renewal Continuity Benefits table, Page 2 of policy schedule"
+  },
+
+  "declared_peds": [],
+
+  "special_conditions": {
+    "declared_peds_on_schedule": [],
+    "permanent_exclusions": [],
+    "loading_applied": false,
+    "note": "No declared PEDs or special exclusions on Badal's schedule. Either no PEDs declared or none accepted as material. Verify against original proposal form."
+  },
+
+  "addons": {
+    "unlimited_restore_active": true,
+    "unlimited_restore_uin": "HDFHLIA22188V012122",
+    "protect_benefit_active": true,
+    "protect_benefit_note": "Protect Benefit is DEFAULT ON for Optima Secure per Annexure C. Not explicitly removed — therefore active.",
+    "ipa_rider_active": false,
+    "optima_wellbeing_active": false,
+    "critical_illness_addon_active": false,
+    "hospital_cash_benefit_active": false,
+    "overseas_travel_secure_active": false,
+    "aggregate_deductible_active": false,
+    "ped_wait_modification_active": false,
+    "room_rent_modification_active": false
+  },
+
+  "premium": {
+    "base_premium_inr": 24050,
+    "addon_premium_inr": 120.25,
+    "total_premium_inr": 24170.25,
+    "loading_inr": 0,
+    "discounts_inr": 0
+  },
+
+  "schedule_of_benefits": {
+    "in_patient_treatment": "Upto base SI",
+    "pre_hospitalisation_days": 60,
+    "post_hospitalisation_days": 180,
+    "day_care_procedures": "Upto base SI",
+    "domiciliary_treatment": "Upto base SI",
+    "organ_donor": "Upto base SI",
+    "restore_benefit": "100% of base SI — unlimited times with Unlimited Restore add-on active",
+    "plus_benefit": "50% of base SI per renewal irrespective of claims, maximum 100%",
+    "secure_benefit": "100% of base SI as additional pool",
+    "preventive_health_checkup_per_person_inr": 5000,
+    "protect_benefit": "Annexure B non-medical expenses covered upto SI — DEFAULT ON"
+  }
+}

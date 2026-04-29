@@ -1,0 +1,5 @@
+"icd_codes": [
+  {"code": "unspecified", "description": "Other heart disorders in diseases classified elsewhere"},
+  {"code": "unspecified", "description": "Other and unspecified disorders of circulatory system"}
+],
+"icd_specificity": "none — HDFC ERGO confirmed no specific ICD code available for this condition"
