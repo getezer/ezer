@@ -17,7 +17,9 @@ EXTRACTED    = "🟡 EXTRACTED"
 EXPERIMENTAL = "🔴 EXPERIMENTAL"
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-BASE_DIR     = Path(__file__).resolve().parent.parent
+_SCRIPT_DIR  = Path(__file__).resolve().parent
+# Support both: run from engine/ subfolder (production) or root (testing)
+BASE_DIR     = _SCRIPT_DIR.parent if _SCRIPT_DIR.name == "engine" else _SCRIPT_DIR
 LIBRARY_DIR  = BASE_DIR / "data" / "product_library"
 SCHEDULE_DIR = BASE_DIR / "data" / "user_schedules"
 
@@ -43,13 +45,17 @@ def load_user_schedule(policy_number: str) -> dict:
 
 
 # ── Insight Object ─────────────────────────────────────────────────────────────
-def insight(category: str, confidence: str, title: str, body: str) -> dict:
-    return {
+def insight(category: str, confidence: str, title: str, body: str,
+            draft_letter: str = None) -> dict:
+    obj = {
         "category":   category,
         "confidence": confidence,
         "title":      title,
         "body":       body
     }
+    if draft_letter:
+        obj["draft_letter"] = draft_letter
+    return obj
 
 
 # ── Insight Generators ─────────────────────────────────────────────────────────
@@ -282,6 +288,161 @@ def check_post_hospitalisation(lib: dict, sch: dict) -> list:
     return []
 
 
+def check_secure_benefit(lib: dict, sch: dict) -> list:
+    product_id = sch.get("_schema_meta", {}).get("product_id", "")
+    if "OPTIMA_SECURE" not in product_id:
+        return []
+    secure_si = sch.get("sum_insured", {}).get("secure_benefit_si_inr", 0)
+    if not secure_si:
+        return []
+    base_si = sch.get("sum_insured", {}).get("base_si_inr", 0)
+    plus_si = sch.get("sum_insured", {}).get("plus_benefit_si_inr", 0)
+    total = base_si + plus_si + secure_si
+    return [insight(
+        "ACTIVE_FEATURE", VERIFIED,
+        f"Secure Benefit — Additional ₹{secure_si // 100000}L SI Pool ACTIVE",
+        f"On top of your Base SI (₹{base_si // 100000}L) and Plus Benefit "
+        f"(₹{plus_si // 100000}L), you have an additional Secure Benefit pool of "
+        f"₹{secure_si // 100000}L. Your real coverage ceiling before Restore even "
+        f"triggers is ₹{total // 100000}L. This is unique to Optima Secure — "
+        f"Optima Restore does not have an equivalent. Most buyers and even some agents "
+        f"are unaware of this benefit."
+    )]
+
+
+def draft_schedule_correction_letter(sch: dict, flag: dict) -> str:
+    name = sch.get("policy_meta", {}).get("insured_name", "Insured")
+    policy = sch.get("_schema_meta", {}).get("policy_number", "")
+    desc = flag.get("description", "")
+    correct = flag.get("correct_structure", "")
+    return (
+        f"To,\n"
+        f"The Grievance Officer\n"
+        f"HDFC ERGO General Insurance Company Limited\n"
+        f"Customer Happiness Center, D-301, 3rd Floor,\n"
+        f"Eastern Business District, LBS Marg,\n"
+        f"Bhandup (West), Mumbai - 400 078\n\n"
+        f"Email: grievance@hdfcergo.com | care@hdfcergo.com\n\n"
+        f"Subject: Policy No. {policy} — Discrepancy in Exclusion/Waiting Period "
+        f"Table Requiring Urgent Correction | {name}\n\n"
+        f"Dear Team,\n\n"
+        f"I write with reference to the above policy issued in favour of {name}.\n\n"
+        f"On careful review of the issued policy schedule, I have identified a "
+        f"discrepancy in the exclusion/waiting period table that requires immediate "
+        f"correction:\n\n"
+        f"ISSUE IDENTIFIED:\n"
+        f"{desc}\n\n"
+        f"CORRECT STRUCTURE SHOULD BE:\n"
+        f"{correct}\n\n"
+        f"I request you to:\n"
+        f"1. Acknowledge this communication within 7 working days\n"
+        f"2. Issue a corrected policy schedule within 15 working days\n"
+        f"3. Confirm in writing that the corrected schedule accurately reflects "
+        f"the actual SI enhancement history\n\n"
+        f"Please note that failure to correct this error may result in disputes "
+        f"at claim time, which I wish to avoid by resolving this proactively.\n\n"
+        f"If this matter is not resolved within the timelines above, I reserve the "
+        f"right to escalate to the Insurance Ombudsman, Bhubaneswar and file a "
+        f"complaint on IRDAI IGMS portal.\n\n"
+        f"Yours faithfully,\n"
+        f"[Policyholder Name]\n"
+        f"Policy No: {policy}\n"
+        f"Contact: [Phone] | [Email]"
+    )
+
+
+def draft_ped_clarification_letter(sch: dict, ped: dict) -> str:
+    name = sch.get("policy_meta", {}).get("insured_name", "Insured")
+    policy = sch.get("_schema_meta", {}).get("policy_number", "")
+    condition = ped.get("condition_name", "")
+    icd = ped.get("icd_code") or ped.get("icd_codes", [{}])[0].get("code", "unspecified")
+    return (
+        f"To,\n"
+        f"The Grievance Officer\n"
+        f"HDFC ERGO General Insurance Company Limited\n"
+        f"Customer Happiness Center, D-301, 3rd Floor,\n"
+        f"Eastern Business District, LBS Marg,\n"
+        f"Bhandup (West), Mumbai - 400 078\n\n"
+        f"Email: grievance@hdfcergo.com | care@hdfcergo.com\n\n"
+        f"Subject: Policy No. {policy} — Written Confirmation Requested for "
+        f"Declared PED Scope | {name}\n\n"
+        f"Dear Team,\n\n"
+        f"I write with reference to the above policy issued in favour of {name}, "
+        f"wherein '{condition}' has been declared and accepted as a Pre-Existing Disease.\n\n"
+        f"I have noted that the ICD-10 code assigned to this condition is listed as "
+        f"'{icd}', which is a broad/catch-all category. In order to ensure clarity "
+        f"at the time of any future claim, I request your written confirmation of "
+        f"the following:\n\n"
+        f"1. The exact scope of conditions covered under the declared PED "
+        f"'{condition}'\n"
+        f"2. Whether all conditions medically arising from or related to "
+        f"'{condition}' will be treated as covered under the declared PED\n"
+        f"3. The specific ICD-10 codes, if any, that have been recorded against "
+        f"this PED in your underwriting system\n\n"
+        f"This confirmation is sought proactively to avoid any disputes at claim "
+        f"time regarding the scope of coverage.\n\n"
+        f"I request you to:\n"
+        f"1. Acknowledge this communication within 7 working days\n"
+        f"2. Provide written confirmation within 15 working days\n\n"
+        f"If this matter is not resolved within the timelines above, I reserve the "
+        f"right to escalate to the Insurance Ombudsman, Bhubaneswar and file a "
+        f"complaint on IRDAI IGMS portal.\n\n"
+        f"Yours faithfully,\n"
+        f"[Policyholder Name]\n"
+        f"Policy No: {policy}\n"
+        f"Contact: [Phone] | [Email]"
+    )
+
+
+def check_action_outputs(lib: dict, sch: dict) -> list:
+    insights = []
+
+    # Schedule integrity action letters
+    flags = sch.get("waiting_periods", {}).get("schedule_integrity_flags", [])
+    for flag in flags:
+        if flag.get("priority") in ("HIGH", "MEDIUM"):
+            letter = draft_schedule_correction_letter(sch, flag)
+            insights.append(insight(
+                "ACTION_REQUIRED", VERIFIED,
+                "Action Required — Send Schedule Correction Request to HDFC ERGO",
+                "A schedule error has been detected that requires a formal written "
+                "correction request to HDFC ERGO. A draft letter is provided below — "
+                "review, fill in your contact details, and send to care@hdfcergo.com "
+                "and grievance@hdfcergo.com. Keep a copy and note the date sent.",
+                draft_letter=letter
+            ))
+
+    # PED ICD vagueness action letters
+    peds = sch.get("declared_peds", [])
+    for ped in peds:
+        for flag in ped.get("ezer_flags", []):
+            if flag.get("flag_type") == "PED_ICD_VAGUENESS":
+                letter = draft_ped_clarification_letter(sch, ped)
+                insights.append(insight(
+                    "ACTION_REQUIRED", EXTRACTED,
+                    f"Action Required — Request Written PED Scope Confirmation for "
+                    f"'{ped.get('condition_name', '')}'",
+                    "The ICD code for this declared PED is vague or a catch-all category. "
+                    "At claim time, HDFC ERGO may attempt to argue the specific condition "
+                    "is outside the declared PED scope. Obtain written confirmation now, "
+                    "before any claim arises. A draft letter is provided below.",
+                    draft_letter=letter
+                ))
+
+    return insights
+    days = sch.get("schedule_of_benefits", {}).get("post_hospitalisation_days", 0)
+    if days >= 180:
+        return [insight(
+            "ACTIVE_FEATURE", VERIFIED,
+            "180-Day Post-Hospitalisation Coverage",
+            "Post-discharge expenses — follow-up visits, medicines, physiotherapy — "
+            "are covered for 180 days from discharge. Industry standard is 60-90 days. "
+            "Keep all post-discharge receipts and file one consolidated claim before "
+            "the 180-day window closes."
+        )]
+    return []
+
+
 # ── Master Engine ──────────────────────────────────────────────────────────────
 
 def generate_insights(schedule: dict) -> list:
@@ -294,12 +455,14 @@ def generate_insights(schedule: dict) -> list:
     all_insights += check_unlimited_restore(library, schedule)
     all_insights += check_protect_benefit(library, schedule)
     all_insights += check_consumables_optima_restore(library, schedule)
+    all_insights += check_secure_benefit(library, schedule)
     all_insights += check_plus_benefit(library, schedule)
     all_insights += check_post_hospitalisation(library, schedule)
     all_insights += check_moratorium(library, schedule)
     all_insights += check_waiting_periods(library, schedule)
     all_insights += check_ped_quality(library, schedule)
     all_insights += check_schedule_integrity(library, schedule)
+    all_insights += check_action_outputs(library, schedule)
 
     return all_insights
 
@@ -322,6 +485,11 @@ def print_insights(schedule: dict, insights: list):
         print(f"    {ins['title']}")
         for line in ins['body'].split('\n'):
             print(f"    {line}")
+        if ins.get("draft_letter"):
+            print(f"\n    ── DRAFT LETTER ──────────────────────────────────────")
+            for line in ins["draft_letter"].split('\n'):
+                print(f"    {line}")
+            print(f"    ── END DRAFT LETTER ──────────────────────────────────")
 
     print(f"\n  Total insights: {len(insights)}")
     print("=" * 70 + "\n")
