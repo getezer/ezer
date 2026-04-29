@@ -46,10 +46,13 @@ def load_user_schedule(policy_number: str) -> dict:
 
 # ── Insight Object ─────────────────────────────────────────────────────────────
 def insight(category: str, confidence: str, title: str, body: str,
+            type: str = "INFO", priority: str = "LOW",
             draft_letter: str = None) -> dict:
     obj = {
         "category":   category,
         "confidence": confidence,
+        "type":       type,
+        "priority":   priority,
         "title":      title,
         "body":       body
     }
@@ -71,7 +74,8 @@ def check_unlimited_restore(lib: dict, sch: dict) -> list:
             "Unlimited Restore is ACTIVE",
             "Your sum insured is restored 100% unlimited times in a policy year whenever "
             "it is partially or fully exhausted. This is the most valuable feature on this "
-            "policy — most buyers don't know they have it."
+            "policy — most buyers don't know they have it.",
+            type="INFO", priority="LOW"
         ))
     else:
         addon_info = lib.get("restore_benefit", {}).get("unlimited_restore_addon", {})
@@ -80,7 +84,8 @@ def check_unlimited_restore(lib: dict, sch: dict) -> list:
             "Unlimited Restore is NOT active",
             "Your policy only restores your SI once per year. If you exhaust it twice in "
             "the same year, you are on your own for the second claim. Unlimited Restore "
-            "can be added at next renewal — ask your agent for the premium."
+            "can be added at next renewal — ask your agent for the premium.",
+            type="WARNING", priority="MEDIUM"
         ))
     return insights
 
@@ -99,14 +104,16 @@ def check_protect_benefit(lib: dict, sch: dict) -> list:
             "Protect Benefit is ACTIVE — consumables covered",
             "Non-medical consumables — gloves, masks, syringes, PPE, attendant charges, "
             "diapers and 60+ other Annexure B items — are covered by default on your policy. "
-            "Most policies deduct these from every settlement. Yours does not."
+            "Most policies deduct these from every settlement. Yours does not.",
+            type="INFO", priority="LOW"
         ))
     else:
         insights.append(insight(
             "GAP_FEATURE", VERIFIED,
             "Protect Benefit has been removed",
             "Annexure B consumables are NOT covered on your policy. You will face deductions "
-            "of ₹10,000–30,000 per hospitalisation for gloves, masks, syringes and similar items."
+            "of ₹10,000–30,000 per hospitalisation for gloves, masks, syringes and similar items.",
+            type="WARNING", priority="MEDIUM"
         ))
     return insights
 
@@ -125,14 +132,16 @@ def check_consumables_optima_restore(lib: dict, sch: dict) -> list:
             "Optima Restore excludes 68 non-medical items (Annexure I) — gloves, masks, "
             "syringes, PPE, attendant charges and more. Without the Protector Rider, expect "
             "₹10,000–30,000 in deductions per hospitalisation. The Protector Rider covers "
-            "these — ask your agent to add it at next renewal."
+            "these — ask your agent to add it at next renewal.",
+            type="WARNING", priority="MEDIUM"
         ))
     else:
         insights.append(insight(
             "ACTIVE_FEATURE", VERIFIED,
             "Protector Rider ACTIVE — consumables covered",
             "Annexure I non-medical items are covered via your Protector Rider. "
-            "You will not face consumable deductions at settlement."
+            "You will not face consumable deductions at settlement.",
+            type="INFO", priority="LOW"
         ))
     return insights
 
@@ -157,7 +166,8 @@ def check_waiting_periods(lib: dict, sch: dict) -> list:
                 f"For the {si_label} SI block, a 24-month specific disease waiting period "
                 f"is still running. Approximately {remaining} months remaining — expires "
                 f"around {expiry}. Conditions like cataract, hernia, gallbladder, kidney "
-                f"stones, joint replacement are NOT claimable on this block until then."
+                f"stones, joint replacement are NOT claimable on this block until then.",
+                type="WARNING", priority="HIGH"
             ))
 
         # PED waiting
@@ -170,7 +180,8 @@ def check_waiting_periods(lib: dict, sch: dict) -> list:
                 f"PED Waiting Running — {si_label} block",
                 f"Pre-existing disease waiting period is still running on the {si_label} "
                 f"block. Approximately {remaining} months remaining — expires around "
-                f"{expiry}. Any declared PED claim on this block will be denied until then."
+                f"{expiry}. Any declared PED claim on this block will be denied until then.",
+                type="WARNING", priority="HIGH"
             ))
 
     return insights
@@ -190,7 +201,8 @@ def check_schedule_integrity(lib: dict, sch: dict) -> list:
             f"⚠️  Schedule Error Detected [{priority} PRIORITY]",
             f"{desc}\n\n"
             f"Correct structure: {correct}\n\n"
-            f"Action required: {action}"
+            f"Action required: {action}",
+            type="WARNING", priority="HIGH"
         ))
     return insights
 
@@ -205,7 +217,8 @@ def check_ped_quality(lib: dict, sch: dict) -> list:
             insights.append(insight(
                 "PED_QUALITY_FLAG", EXTRACTED,
                 f"⚠️  PED Risk Flag — {ped.get('condition_name', 'Unknown')}",
-                flag.get("description", "")
+                flag.get("description", ""),
+                type="WARNING", priority="HIGH"
             ))
 
         # Check coverage status per block
@@ -220,7 +233,8 @@ def check_ped_quality(lib: dict, sch: dict) -> list:
                     f"{ped.get('condition_name')} is NOT claimable on the {block_id} "
                     f"SI block for approximately {remaining} more months "
                     f"(until ~{expiry}). Claims on this block related to "
-                    f"{ped.get('condition_name')} will be denied until then."
+                    f"{ped.get('condition_name')} will be denied until then.",
+                    type="WARNING", priority="HIGH"
                 ))
 
     return insights
@@ -238,7 +252,8 @@ def check_moratorium(lib: dict, sch: dict) -> list:
             f"You have {months} months of continuous coverage. The moratorium period "
             f"({moratorium_months} months) has been crossed. HDFC ERGO cannot contest "
             f"your policy or deny any claim on grounds of non-disclosure or "
-            f"misrepresentation — except in cases of proven fraud."
+            f"misrepresentation — except in cases of proven fraud.",
+            type="INFO", priority="LOW"
         ))
     return insights
 
@@ -257,7 +272,8 @@ def check_plus_benefit(lib: dict, sch: dict) -> list:
                 "Plus Benefit Fully Accrued",
                 f"Your Plus Benefit of ₹{plus_si // 100000}L is fully accrued and locked in. "
                 f"This grows your SI by 100% at no extra premium. It accrues irrespective "
-                f"of claims — this is NOT a no-claim bonus."
+                f"of claims — this is NOT a no-claim bonus.",
+                type="INFO", priority="LOW"
             ))
 
     if "OPTIMA_RESTORE" in product_id:
@@ -269,7 +285,8 @@ def check_plus_benefit(lib: dict, sch: dict) -> list:
                 "ACTIVE_FEATURE", VERIFIED,
                 "Multiplier Benefit Fully Accrued",
                 f"Your Multiplier Benefit of ₹{m_si // 100000}L is fully accrued. "
-                f"This effectively doubles your base SI at no extra premium."
+                f"This effectively doubles your base SI at no extra premium.",
+                type="INFO", priority="LOW"
             ))
     return insights
 
@@ -283,7 +300,8 @@ def check_post_hospitalisation(lib: dict, sch: dict) -> list:
             "Post-discharge expenses — follow-up visits, medicines, physiotherapy — "
             "are covered for 180 days from discharge. Industry standard is 60-90 days. "
             "Keep all post-discharge receipts and file one consolidated claim before "
-            "the 180-day window closes."
+            "the 180-day window closes.",
+            type="INFO", priority="LOW"
         )]
     return []
 
@@ -306,7 +324,8 @@ def check_secure_benefit(lib: dict, sch: dict) -> list:
         f"₹{secure_si // 100000}L. Your real coverage ceiling before Restore even "
         f"triggers is ₹{total // 100000}L. This is unique to Optima Secure — "
         f"Optima Restore does not have an equivalent. Most buyers and even some agents "
-        f"are unaware of this benefit."
+        f"are unaware of this benefit.",
+        type="INFO", priority="LOW"
     )]
 
 
@@ -409,6 +428,7 @@ def check_action_outputs(lib: dict, sch: dict) -> list:
                 "correction request to HDFC ERGO. A draft letter is provided below — "
                 "review, fill in your contact details, and send to care@hdfcergo.com "
                 "and grievance@hdfcergo.com. Keep a copy and note the date sent.",
+                type="ACTION", priority="HIGH",
                 draft_letter=letter
             ))
 
@@ -426,21 +446,11 @@ def check_action_outputs(lib: dict, sch: dict) -> list:
                     "At claim time, HDFC ERGO may attempt to argue the specific condition "
                     "is outside the declared PED scope. Obtain written confirmation now, "
                     "before any claim arises. A draft letter is provided below.",
+                    type="ACTION", priority="HIGH",
                     draft_letter=letter
                 ))
 
     return insights
-    days = sch.get("schedule_of_benefits", {}).get("post_hospitalisation_days", 0)
-    if days >= 180:
-        return [insight(
-            "ACTIVE_FEATURE", VERIFIED,
-            "180-Day Post-Hospitalisation Coverage",
-            "Post-discharge expenses — follow-up visits, medicines, physiotherapy — "
-            "are covered for 180 days from discharge. Industry standard is 60-90 days. "
-            "Keep all post-discharge receipts and file one consolidated claim before "
-            "the 180-day window closes."
-        )]
-    return []
 
 
 # ── Master Engine ──────────────────────────────────────────────────────────────
@@ -467,32 +477,125 @@ def generate_insights(schedule: dict) -> list:
     return all_insights
 
 
-# ── Printer ───────────────────────────────────────────────────────────────────
+# ── Presentation Helpers ──────────────────────────────────────────────────────
 
-def print_insights(schedule: dict, insights: list):
-    name = schedule.get("policy_meta", {}).get("insured_name", "Unknown")
-    policy = schedule.get("_schema_meta", {}).get("policy_number", "")
+PRIORITY_ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
+
+def derive_action_instruction(title: str, priority: str) -> str:
+    """Convert insight title into a short imperative instruction."""
+    # Strip ACTION prefix
+    instruction = title.replace("Action Required — ", "").strip()
+    # For WARNING insights that aren't actions, prefix with advisory verb
+    if not instruction[0].isupper() or instruction == title:
+        instruction = "Review: " + instruction
+    # Add 'today' for HIGH priority actions
+    if priority == "HIGH" and not instruction.startswith("Review"):
+        if not instruction.endswith("today"):
+            instruction += " today"
+    return instruction
+
+
+def compute_summary(insights: list) -> dict:
+    actions   = [i for i in insights if i["type"] == "ACTION"]
+    warnings  = [i for i in insights if i["type"] == "WARNING"]
+    high_warn = [i for i in warnings if i["priority"] == "HIGH"]
+    info      = [i for i in insights if i["type"] == "INFO"]
+
+    # Strength
+    if len(actions) >= 1:
+        strength = "WEAK"
+    elif len(high_warn) >= 1:
+        strength = "MODERATE"
+    else:
+        strength = "STRONG"
+
+    # Next Best Action
+    next_action = None
+    if actions:
+        top = sorted(actions, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
+        next_action = derive_action_instruction(top["title"], top["priority"])
+    elif warnings:
+        top = sorted(warnings, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
+        next_action = "Be aware: " + top["title"]
+
+    return {
+        "strength":    strength,
+        "action_count": len(actions),
+        "warning_count": len(warnings),
+        "info_count":   len(info),
+        "total":        len(insights),
+        "next_action":  next_action
+    }
+
+
+def print_summary_block(schedule: dict, summary: dict):
+    name    = schedule.get("policy_meta", {}).get("insured_name", "Unknown")
+    policy  = schedule.get("_schema_meta", {}).get("policy_number", "")
     product = schedule.get("_schema_meta", {}).get("product_id", "")
 
+    strength_icon = {"STRONG": "🟢", "MODERATE": "🟡", "WEAK": "🔴"}.get(summary["strength"], "⚪")
+
     print("\n" + "=" * 70)
-    print(f"  EZER INSIGHTS — {name}")
-    print(f"  Policy: {policy}")
-    print(f"  Product: {product}")
+    print(f"  EZER POLICY REPORT — {name}")
+    print(f"  Policy: {policy}  |  Product: {product}")
     print("=" * 70)
+    print(f"\n  {strength_icon} Policy Strength: {summary['strength']}")
+    print(f"  Actions Required: {summary['action_count']}  |  "
+          f"Risks Identified: {summary['warning_count']}  |  "
+          f"Total Insights: {summary['total']}")
+    if summary["next_action"]:
+        print(f"\n  ➡  Next Best Action: {summary['next_action']}")
+    print()
 
-    for i, ins in enumerate(insights, 1):
-        print(f"\n[{i}] {ins['confidence']}  |  {ins['category']}")
-        print(f"    {ins['title']}")
-        for line in ins['body'].split('\n'):
-            print(f"    {line}")
-        if ins.get("draft_letter"):
-            print(f"\n    ── DRAFT LETTER ──────────────────────────────────────")
-            for line in ins["draft_letter"].split('\n'):
-                print(f"    {line}")
-            print(f"    ── END DRAFT LETTER ──────────────────────────────────")
 
-    print(f"\n  Total insights: {len(insights)}")
-    print("=" * 70 + "\n")
+def print_insight(idx: int, ins: dict):
+    print(f"  [{idx}] {ins['confidence']} | {ins['type']} | {ins['priority']} | {ins['category']}")
+    print(f"      {ins['title']}")
+    for line in ins["body"].split("\n"):
+        print(f"      {line}")
+    if ins.get("draft_letter"):
+        print(f"\n      ── DRAFT LETTER ──────────────────────────────────────")
+        for line in ins["draft_letter"].split("\n"):
+            print(f"      {line}")
+        print(f"      ── END DRAFT LETTER ──────────────────────────────────")
+
+
+def print_insights(schedule: dict, insights: list):
+    summary = compute_summary(insights)
+    print_summary_block(schedule, summary)
+
+    # Group
+    actions  = sorted([i for i in insights if i["type"] == "ACTION"],
+                      key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))
+    warnings = sorted([i for i in insights if i["type"] == "WARNING"],
+                      key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))
+    info     = sorted([i for i in insights if i["type"] == "INFO"],
+                      key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))
+
+    idx = 1
+
+    if actions:
+        print("  ── IMMEDIATE ACTIONS " + "─" * 49)
+        for ins in actions:
+            print()
+            print_insight(idx, ins)
+            idx += 1
+
+    if warnings:
+        print("\n  ── RISKS & WARNINGS " + "─" * 50)
+        for ins in warnings:
+            print()
+            print_insight(idx, ins)
+            idx += 1
+
+    if info:
+        print("\n  ── COVERAGE & BENEFITS " + "─" * 47)
+        for ins in info:
+            print()
+            print_insight(idx, ins)
+            idx += 1
+
+    print("\n" + "=" * 70 + "\n")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
