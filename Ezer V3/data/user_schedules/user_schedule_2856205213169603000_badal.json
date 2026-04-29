@@ -58,11 +58,13 @@
         },
         "specific_disease_24_month_waiting": {
           "status": "running",
-          "remaining_months": 12
+          "remaining_months": 12,
+          "approximate_expiry": "February 2027"
         },
         "ped_36_month_waiting": {
           "status": "running",
           "remaining_months": 24,
+          "approximate_expiry": "February 2028",
           "remaining_is_remaining_not_total": true
         }
       },
@@ -94,6 +96,7 @@
         "ped_36_month_waiting": {
           "status": "running",
           "remaining_months": 12,
+          "approximate_expiry": "February 2027",
           "remaining_is_remaining_not_total": true
         }
       }
