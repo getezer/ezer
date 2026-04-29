@@ -1,0 +1,99 @@
+{
+  "version": "v1.0",
+  "last_updated": "April 2026",
+  "jurisdiction": "India",
+  "update_instructions": "To update escalation steps edit the relevant phase entry. Do not change phase key names as they are referenced in code. Timeline and description fields can be updated freely when IRDAI guidelines change.",
+
+  "phases": {
+    "ANALYSIS_COMPLETE": {
+      "label": "Analysis Complete",
+      "description": "Ezer has analysed your denial letter and assessed contestability.",
+      "next_step": "CGO_LETTER",
+      "next_step_label": "Generate CGO Letter",
+      "next_step_description": "Generate and send your formal complaint letter to the insurer Chief Grievance Officer.",
+      "timeline": "Do this today. The sooner you send, the sooner the 15-day clock starts.",
+      "urgency": "HIGH",
+      "urgency_reason": "Insurers count on delay. Acting immediately puts you in the strongest position."
+    },
+
+    "CGO_LETTER_GENERATED": {
+      "label": "CGO Letter Generated",
+      "description": "Your CGO complaint letter has been generated and is ready to send.",
+      "next_step": "SEND_CGO_AND_WAIT",
+      "next_step_label": "Send CGO Letter",
+      "next_step_description": "Send your CGO letter to the insurer by email today. Keep a copy. Note the date sent.",
+      "timeline": "Send today. Insurer has 15 days to respond from date of receipt.",
+      "urgency": "HIGH",
+      "urgency_reason": "The 15-day response window starts only when the insurer receives your letter.",
+      "instructions": [
+        "Send the letter to the CGO email address provided.",
+        "CC complaints@irdai.gov.in in the same email.",
+        "Keep a copy of the sent email for your records.",
+        "Note the date you sent the letter.",
+        "Update your Case JSON with the sent date."
+      ]
+    },
+
+    "CGO_SENT": {
+      "label": "CGO Letter Sent",
+      "description": "Your CGO complaint letter has been sent. Waiting for insurer response.",
+      "next_step": "BIMA_BHAROSA",
+      "next_step_label": "File on IRDAI Bima Bharosa",
+      "next_step_description": "If CGO has not responded satisfactorily within 15 days file on IRDAI Bima Bharosa portal.",
+      "timeline": "File after 15 days from CGO letter date if no satisfactory response.",
+      "urgency": "MEDIUM",
+      "urgency_reason": "Filing on Bima Bharosa creates a regulatory record and often accelerates insurer response.",
+      "portal": "https://bimabharosa.irdai.gov.in",
+      "instructions": [
+        "Wait 15 days from the date you sent the CGO letter.",
+        "If no response or unsatisfactory response, go to bimabharosa.irdai.gov.in.",
+        "File a complaint using your policy number and CCN.",
+        "Keep the Bima Bharosa complaint reference number."
+      ]
+    },
+
+    "BIMA_BHAROSA_FILED": {
+      "label": "Bima Bharosa Filed",
+      "description": "Your complaint has been filed on IRDAI Bima Bharosa portal.",
+      "next_step": "OMBUDSMAN",
+      "next_step_label": "Approach Insurance Ombudsman",
+      "next_step_description": "Approach the Insurance Ombudsman for your jurisdiction. Free. Quasi-judicial. Decisions binding on insurer.",
+      "timeline": "File within 1 year of denial date. Recommended within 1 month for best results.",
+      "urgency": "MEDIUM",
+      "urgency_reason": "The Ombudsman is the most powerful tool available to policyholders. Decisions are binding on the insurer.",
+      "portal": "https://cioins.co.in",
+      "instructions": [
+        "Gather all documents - denial letter, CGO letter, CGO response if any, Bima Bharosa reference.",
+        "Identify your Ombudsman office from your Case JSON - jurisdiction based on policy address.",
+        "File complaint at cioins.co.in or visit the Ombudsman office directly.",
+        "The process is free. No lawyer needed.",
+        "Ombudsman decisions are binding on the insurer."
+      ]
+    },
+
+    "OMBUDSMAN_FILED": {
+      "label": "Ombudsman Complaint Filed",
+      "description": "Your complaint has been filed with the Insurance Ombudsman.",
+      "next_step": "AWAIT_OMBUDSMAN_DECISION",
+      "next_step_label": "Await Ombudsman Decision",
+      "next_step_description": "The Ombudsman will review your case and issue a decision. This process typically takes 3 to 6 months.",
+      "timeline": "Ombudsman decisions typically take 3 to 6 months.",
+      "urgency": "LOW",
+      "urgency_reason": "Case is now in Ombudsman hands. Attend all hearings. Respond to all communications promptly.",
+      "instructions": [
+        "Attend all hearings scheduled by the Ombudsman.",
+        "Respond to all communications within the timeframe given.",
+        "Submit any additional documents requested promptly.",
+        "Keep copies of all communications.",
+        "Ombudsman decisions are binding on the insurer."
+      ]
+    }
+  },
+
+  "general_guidance": {
+    "ombudsman_note": "The Insurance Ombudsman is a free quasi-judicial authority. Decisions are binding on the insurer. Filing a complaint costs nothing. This is the most powerful tool available to policyholders yet largely unknown.",
+    "timeline_note": "Maximum time to file with Ombudsman is 1 year from denial date. Do not delay beyond 1 month for best results.",
+    "document_note": "Keep copies of every letter sent and received. Every date matters. Every reference number matters.",
+    "legal_note": "Ezer provides guidance only. For complex cases consult a qualified insurance advisor or lawyer."
+  }
+}

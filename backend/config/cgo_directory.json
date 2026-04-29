@@ -1,0 +1,116 @@
+{
+  "directory": {
+    "hdfc ergo": {
+      "cgo_email": "cgo@hdfcergo.com",
+      "grievance_email": "grievance@hdfcergo.com",
+      "website": "www.hdfcergo.com",
+      "verified": true
+    },
+    "star health": {
+      "cgo_email": "cgo@starhealth.in",
+      "grievance_email": "complaints@starhealth.in",
+      "website": "www.starhealth.in",
+      "verified": true
+    },
+    "icici lombard": {
+      "cgo_email": "cgricilombard@icicilombard.com",
+      "grievance_email": "customersupport@icicilombard.com",
+      "website": "www.icicilombard.com",
+      "verified": true
+    },
+    "bajaj allianz": {
+      "cgo_email": "bagic.cgo@bajajallianz.co.in",
+      "grievance_email": "bagichelp@bajajallianz.co.in",
+      "website": "www.bajajallianz.com",
+      "verified": true
+    },
+    "niva bupa": {
+      "cgo_email": "cgo@nivabupa.com",
+      "grievance_email": "care@nivabupa.com",
+      "website": "www.nivabupa.com",
+      "verified": true
+    },
+    "care health": {
+      "cgo_email": "care@careinsurance.com",
+      "grievance_email": "care@careinsurance.com",
+      "website": "www.careinsurance.com",
+      "verified": true
+    },
+    "aditya birla": {
+      "cgo_email": "health.helpdesk@adityabirlacapital.com",
+      "grievance_email": "health.helpdesk@adityabirlacapital.com",
+      "website": "www.adityabirlahealthinsurance.com",
+      "verified": true
+    },
+    "new india": {
+      "cgo_email": "cmd@newindia.co.in",
+      "grievance_email": "ho.grievance@newindia.co.in",
+      "website": "www.newindia.co.in",
+      "verified": true
+    },
+    "national insurance": {
+      "cgo_email": "cmd@nationalinsurance.nic.co.in",
+      "grievance_email": "nicgrievance@nationalinsurance.nic.co.in",
+      "website": "www.nationalinsurance.nic.co.in",
+      "verified": true
+    },
+    "oriental insurance": {
+      "cgo_email": "cmd@orientalinsurance.org.in",
+      "grievance_email": "grievance@orientalinsurance.org.in",
+      "website": "www.orientalinsurance.org.in",
+      "verified": true
+    },
+    "united india": {
+      "cgo_email": "headoffice@uiic.co.in",
+      "grievance_email": "grievance@uiic.co.in",
+      "website": "www.uiic.co.in",
+      "verified": true
+    },
+    "lic": {
+      "cgo_email": "centralgrievance.co@licindia.in",
+      "grievance_email": "centralgrievance.co@licindia.in",
+      "website": "www.licindia.in",
+      "verified": true
+    },
+    "sbi life": {
+      "cgo_email": "grievance@sbilife.co.in",
+      "grievance_email": "grievance@sbilife.co.in",
+      "website": "www.sbilife.co.in",
+      "verified": true
+    },
+    "hdfc life": {
+      "cgo_email": "service@hdfclife.com",
+      "grievance_email": "service@hdfclife.com",
+      "website": "www.hdfclife.com",
+      "verified": true
+    },
+    "icici prudential": {
+      "cgo_email": "lifeline@iciciprulife.com",
+      "grievance_email": "lifeline@iciciprulife.com",
+      "website": "www.iciciprulife.com",
+      "verified": true
+    },
+    "max life": {
+      "cgo_email": "ask@maxlifeinsurance.com",
+      "grievance_email": "ask@maxlifeinsurance.com",
+      "website": "www.maxlifeinsurance.com",
+      "verified": true
+    },
+    "reliance health": {
+      "cgo_email": "rgicare@relianceada.com",
+      "grievance_email": "rgicare@relianceada.com",
+      "website": "www.reliancegeneral.co.in",
+      "verified": true
+    }
+  },
+  "default": {
+    "cgo_email": "cgo@[insurer-website].com",
+    "grievance_email": "grievance@[insurer-website].com",
+    "website": "Please check insurer website",
+    "verified": false
+  },
+  "irdai_cc": "complaints@irdai.gov.in",
+  "disclaimer": "Please verify CGO email on the insurer official website before sending. Email addresses may change. Ezer provides best available information but cannot guarantee accuracy.",
+  "last_updated": "April 2026",
+  "update_instructions": "To add or update an insurer entry, add a new key under directory matching the insurer name in lowercase. Set verified to false until the email is confirmed on the insurer official website."
+}
