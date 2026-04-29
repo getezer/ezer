@@ -43,9 +43,15 @@ Ezer V3/
 │   ├── product_library/     ← Tier 1 JSON files
 │   └── user_schedules/      ← Tier 2 JSON files
 ├── engine/                  ← Insight Engine (Python)
+│   └── insight_engine.py
 ├── api/                     ← FastAPI endpoints (not yet built)
-└── docs/                    ← Architecture decisions and specs
-    └── DECISION.md
+└── docs/
+    ├── DECISION.md          ← Architecture decisions and failure analysis
+    ├── README_V3.md         ← This file
+    ├── PRD_V3.1.md          ← Product requirements for next evolution
+    ├── TDD_V3.1.md          ← Technical design document
+    ├── CURRENT_STATE.md     ← Snapshot of what is working today
+    └── V3_RETROSPECT.md     ← Lessons from V1 and V2
 ```
 
 ---
@@ -74,9 +80,12 @@ Ezer V3/
 |-----------|--------|
 | Tier 1 — Product Libraries | ✅ Done |
 | Tier 2 — User Schedules | ✅ Done |
-| Insight Engine | 🔄 In Progress |
-| Schedule Integrity Checker | ⏳ Pending |
-| PED Quality Checker | ⏳ Pending |
+| Insight Engine | ✅ Done |
+| Schedule Integrity Checker | ✅ Done — integrated in engine |
+| PED Quality Checker | ✅ Done — integrated in engine |
+| Action Output — Draft Letters | ✅ Done |
+| Classification + Grouping | ✅ Done |
+| Policy Evolution Layer (V3.1) | 🔄 Next |
 | FastAPI Endpoint | ⏳ Pending |
 | Correspondence Tracker | ⏳ Pending |
 | Claim Navigation | ⏳ Pending — after above are solid |
