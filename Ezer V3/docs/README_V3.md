@@ -46,12 +46,16 @@ Ezer V3/
 │   └── insight_engine.py
 ├── api/                     ← FastAPI endpoints (not yet built)
 └── docs/
-    ├── DECISION.md          ← Architecture decisions and failure analysis
-    ├── README_V3.md         ← This file
-    ├── PRD_V3.1.md          ← Product requirements for next evolution
-    ├── TDD_V3.1.md          ← Technical design document
-    ├── CURRENT_STATE.md     ← Snapshot of what is working today
-    └── V3_RETROSPECT.md     ← Lessons from V1 and V2
+    ├── DECISION.md                      ← Architecture decisions and failure analysis
+    ├── README_V3.md                     ← This file
+    ├── PRD_V3.1.md                      ← Product requirements
+    ├── TDD_V3.1.md                      ← Technical design document
+    ├── CURRENT_STATE.md                 ← Snapshot of what is working today
+    ├── V3_RETROSPECT.md                 ← Lessons from V1 and V2
+    ├── FIRST_OUTCOME.md                 ← First real-world outcome record
+    ├── V3.1_Product_Logic_Manifest.md   ← Fortress philosophy, 75% rule, senior exception
+    ├── V3.1_Technical_Architecture_Guide.md ← Data contracts, evaluative matrix, timeline engine
+    └── V3.1_Maintenance_Guide.md        ← How to add insights, update thresholds, add letters
 ```
 
 ---
@@ -70,7 +74,7 @@ Ezer V3/
 | Badal Satapathy | 2856205213169603000 | Optima Secure | ✅ Curated |
 | Kajal Satapathy | 2856205213224703000 | Optima Secure | ✅ Curated |
 | Gupta Prasad Satapathy | 2805207151903301000 | Optima Restore | ✅ Curated |
-| Basanti Satapathy | 2805207149369401000 | Optima Restore | ✅ Curated |
+| Basanti Satapathy | 2805207149369401001 | Optima Restore | ✅ Curated — corrected schedule |
 
 ---
 
@@ -85,7 +89,10 @@ Ezer V3/
 | PED Quality Checker | ✅ Done — integrated in engine |
 | Action Output — Draft Letters | ✅ Done |
 | Classification + Grouping | ✅ Done |
-| Policy Evolution Layer (V3.1) | 🔄 Next |
+| Policy Evolution Timeline | ✅ Done — V3.1 Sprint A |
+| Renewal Guidance Layer | ✅ Done — V3.1 Sprint A |
+| Coverage Maturity Score | ✅ Done — V3.1 Sprint B |
+| Strength via Clean SI Ratio | ✅ Done — V3.1 Sprint B |
 | FastAPI Endpoint | ⏳ Pending |
 | Correspondence Tracker | ⏳ Pending |
 | Claim Navigation | ⏳ Pending — after above are solid |
@@ -110,6 +117,6 @@ python engine/insight_engine.py
 
 ---
 
-*Last updated: 2026-04-29*
+*Last updated: 2026-04-30*
 *Author: Badal Satapathy*
 *Product: Ezer — getezer.app*

@@ -106,7 +106,7 @@ These will be added after the policy understanding layer is solid. The sequence 
 | user_schedule_2856205213169603000_badal.json | Badal Satapathy | 2856205213169603000 | Optima Secure |
 | user_schedule_2856205213224703000_kajal.json | Kajal Satapathy | 2856205213224703000 | Optima Secure |
 | user_schedule_2805207151903301000_gupta_prasad.json | Gupta Prasad Satapathy | 2805207151903301000 | Optima Restore |
-| user_schedule_2805207149369401000_basanti.json | Basanti Satapathy | 2805207149369401000 | Optima Restore |
+| user_schedule_2805207149369401001_basanti.json | Basanti Satapathy | 2805207149369401001 | Optima Restore — corrected schedule |
 
 ---
 
@@ -115,20 +115,49 @@ These will be added after the policy understanding layer is solid. The sequence 
 1. ~~Insight Engine~~ ✅ Done — classification, grouping, summary, action outputs, draft letters
 2. ~~Schedule Integrity Checker~~ ✅ Done — flags surface in engine, correction letter generated
 3. ~~PED Quality Checker~~ ✅ Done — ICD vagueness flags, clarification letter generated
-4. Policy Evolution Layer (V3.1) — waiting period milestones, renewal guidance, coverage maturity
-5. FastAPI endpoint — wraps the engine, single-policy mode
-6. Correspondence Tracker — tracks open items, Ombudsman-aware
-7. Claim navigation features — only after the above are solid
+4. ~~Policy Evolution Timeline~~ ✅ Done — V3.1 Sprint A
+5. ~~Renewal Guidance Layer~~ ✅ Done — V3.1 Sprint A
+6. ~~Coverage Maturity Score~~ ✅ Done — V3.1 Sprint B
+7. FastAPI endpoint — wraps the engine, single-policy mode
+8. Correspondence Tracker — tracks open items, Ombudsman-aware
+9. Claim navigation features — only after the above are solid
 
-## Architecture Decision — V3.1 (Logged 2026-04-29)
+## Architecture Decision — V3.1 Sprint A (Logged 2026-04-29)
 
 - Policy is treated as an evolving system, not a static document
-- V3.1 adds a lifecycle view: how coverage changes over time as waiting periods expire
-- Renewal guidance layer: what to add at next renewal and why
-- Coverage maturity indicator: time-resolving gaps vs action gaps vs renewal gaps
-- This is the next layer after the insight engine — not claim navigation yet
+- Policy Evolution Timeline: waiting period milestones sorted chronologically using datetime objects
+- Renewal Guidance: gap-based recommendations for inactive features, qualitative framing only
+- `suggested_action` field added to all WARNING insights for imperative NBA derivation
+- RESOLVED flags suppressed from engine output — preserved in JSON as institutional memory
+
+## Architecture Decision — V3.1 Sprint B (Logged 2026-04-30)
+
+**The Fortress Philosophy:**
+- Structural Maturity (DEVELOPING / MATURING / MATURE) and Functional Strength (WEAK / MODERATE / STRONG) are separate dimensions. They must never be conflated.
+- Maturity = how evolved the contract is (waiting period clocks)
+- Strength = how much clean SI is available today (Clean SI ratio)
+
+**The 75% Clean SI Rule:**
+- If ≥75% of total SI is clean (no running waiting periods, fully accrued bonuses), the policy is rated STRONG or MODERATE in Strength
+- A ₹5L enhancement cooking does not weaken a ₹60L fortress
+- Action override is absolute: any open ACTION → WEAK regardless of Clean SI ratio
+
+**The Accrual Gate:**
+- Bonus SI (Plus Benefit, Multiplier Benefit) counts toward Clean SI only when `status == "fully_accrued"`
+- Partially accrued bonuses are potential assets, not clean assets
+
+**The Senior Exception:**
+- Insurers informally decline certain riders (e.g. URB) for elderly policyholders without written grounds
+- This is captured as `rider_ineligible_due_to_age` in Tier 2 (user schedule) — a human-curated field
+- The engine reads this flag and skips the MATURE penalty for that rider
+- No hardcoded age logic in the engine — the curator decides case by case
+
+**Fortress Detection:**
+- The largest SI block is the fortress (base block)
+- Smaller blocks are treated as enhancements
+- Detection hierarchy: explicit `si_enhanced` flag → "enhanced" in block_id → smaller than largest block
 
 ---
 
-*Last updated: 2026-04-29*
+*Last updated: 2026-04-30*
 *Author: Badal Satapathy*
