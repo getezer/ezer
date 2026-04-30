@@ -130,10 +130,10 @@
         {
           "flag_type": "PED_ICD_VAGUENESS",
           "priority": "HIGH",
-          "status": "PARTIALLY_MITIGATED",
-          "mitigated_date": "2026-04-30",
+          "status": "RESOLVED",
+          "resolved_date": "2026-04-30",
           "description": "HDFC ERGO confirmed no specific ICD code exists. Catch-all acceptance is broad but unspecific. At claim time for a specific cardiac event, insurer may attempt to argue specificity mismatch. Obtain written confirmation of broad scope coverage.",
-          "mitigation_note": "Written response received 30/04/2026. HDFC ERGO confirmed PED applicability is governed by declared condition name, not ICD codes. This is a broad shield — more protective than a specific ICD list. Ezer-generated letter prompted this written position on record.",
+          "mitigation_note": "Written response received 30/04/2026 (Service ID 111-633-844). HDFC ERGO confirmed PED applicability is governed by declared condition name, not ICD codes. This is a broad shield — more protective than a specific ICD list. Paper trail complete. No further action required.",
           "ezer_outcome": "Second real-world Ezer outcome. PED quality flag detected by Insight Engine. Action letter generated. HDFC ERGO responded in writing with a position that creates broad protective coverage for 'Other disorders of heart'."
         }
       ]

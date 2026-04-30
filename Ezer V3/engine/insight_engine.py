@@ -10,6 +10,8 @@ Usage:
 import json
 import os
 from pathlib import Path
+from datetime import datetime
+from collections import defaultdict
 
 # ── Confidence Tags ────────────────────────────────────────────────────────────
 VERIFIED     = "🟢 VERIFIED"
@@ -47,14 +49,16 @@ def load_user_schedule(policy_number: str) -> dict:
 # ── Insight Object ─────────────────────────────────────────────────────────────
 def insight(category: str, confidence: str, title: str, body: str,
             type: str = "INFO", priority: str = "LOW",
+            suggested_action: str = "",
             draft_letter: str = None) -> dict:
     obj = {
-        "category":   category,
-        "confidence": confidence,
-        "type":       type,
-        "priority":   priority,
-        "title":      title,
-        "body":       body
+        "category":         category,
+        "confidence":       confidence,
+        "type":             type,
+        "priority":         priority,
+        "title":            title,
+        "body":             body,
+        "suggested_action": suggested_action
     }
     if draft_letter:
         obj["draft_letter"] = draft_letter
@@ -85,7 +89,8 @@ def check_unlimited_restore(lib: dict, sch: dict) -> list:
             "Your policy only restores your SI once per year. If you exhaust it twice in "
             "the same year, you are on your own for the second claim. Unlimited Restore "
             "can be added at next renewal — ask your agent for the premium.",
-            type="WARNING", priority="MEDIUM"
+            type="WARNING", priority="MEDIUM",
+            suggested_action="Add Unlimited Restore at next renewal to protect against multiple claims in the same year."
         ))
     return insights
 
@@ -113,7 +118,8 @@ def check_protect_benefit(lib: dict, sch: dict) -> list:
             "Protect Benefit has been removed",
             "Annexure B consumables are NOT covered on your policy. You will face deductions "
             "of ₹10,000–30,000 per hospitalisation for gloves, masks, syringes and similar items.",
-            type="WARNING", priority="MEDIUM"
+            type="WARNING", priority="MEDIUM",
+            suggested_action="Reinstate Protect Benefit at next renewal to cover consumable deductions."
         ))
     return insights
 
@@ -133,7 +139,8 @@ def check_consumables_optima_restore(lib: dict, sch: dict) -> list:
             "syringes, PPE, attendant charges and more. Without the Protector Rider, expect "
             "₹10,000–30,000 in deductions per hospitalisation. The Protector Rider covers "
             "these — ask your agent to add it at next renewal.",
-            type="WARNING", priority="MEDIUM"
+            type="WARNING", priority="MEDIUM",
+            suggested_action="Add Protector Rider at renewal to cover consumables. Check premium impact with your insurer."
         ))
     else:
         insights.append(insight(
@@ -167,7 +174,8 @@ def check_waiting_periods(lib: dict, sch: dict) -> list:
                 f"is still running. Approximately {remaining} months remaining — expires "
                 f"around {expiry}. Conditions like cataract, hernia, gallbladder, kidney "
                 f"stones, joint replacement are NOT claimable on this block until then.",
-                type="WARNING", priority="HIGH"
+                type="WARNING", priority="HIGH",
+                suggested_action=f"Avoid elective procedures covered under specific disease waiting on this block until {expiry}."
             ))
 
         # PED waiting
@@ -181,7 +189,8 @@ def check_waiting_periods(lib: dict, sch: dict) -> list:
                 f"Pre-existing disease waiting period is still running on the {si_label} "
                 f"block. Approximately {remaining} months remaining — expires around "
                 f"{expiry}. Any declared PED claim on this block will be denied until then.",
-                type="WARNING", priority="HIGH"
+                type="WARNING", priority="HIGH",
+                suggested_action=f"Do not file PED-related claims on this block until {expiry}."
             ))
 
     return insights
@@ -196,13 +205,17 @@ def check_schedule_integrity(lib: dict, sch: dict) -> list:
         desc = flag.get("description", "")
         correct = flag.get("correct_structure", "")
         action = flag.get("recommended_action", "")
+        status = flag.get("status", "OPEN")
+        if status == "RESOLVED":
+            continue
         insights.append(insight(
             "SCHEDULE_INTEGRITY_ERROR", VERIFIED,
             f"⚠️  Schedule Error Detected [{priority} PRIORITY]",
             f"{desc}\n\n"
             f"Correct structure: {correct}\n\n"
             f"Action required: {action}",
-            type="WARNING", priority="HIGH"
+            type="WARNING", priority="HIGH",
+            suggested_action="Send schedule correction request to HDFC ERGO grievance team."
         ))
     return insights
 
@@ -214,11 +227,14 @@ def check_ped_quality(lib: dict, sch: dict) -> list:
     for ped in peds:
         flags = ped.get("ezer_flags", [])
         for flag in flags:
+            if flag.get("status") == "RESOLVED":
+                continue
             insights.append(insight(
                 "PED_QUALITY_FLAG", EXTRACTED,
                 f"⚠️  PED Risk Flag — {ped.get('condition_name', 'Unknown')}",
                 flag.get("description", ""),
-                type="WARNING", priority="HIGH"
+                type="WARNING", priority="HIGH",
+                suggested_action="Obtain written confirmation of PED scope from insurer before any claim arises."
             ))
 
         # Check coverage status per block
@@ -419,6 +435,8 @@ def check_action_outputs(lib: dict, sch: dict) -> list:
     # Schedule integrity action letters
     flags = sch.get("waiting_periods", {}).get("schedule_integrity_flags", [])
     for flag in flags:
+        if flag.get("status") == "RESOLVED":
+            continue
         if flag.get("priority") in ("HIGH", "MEDIUM"):
             letter = draft_schedule_correction_letter(sch, flag)
             insights.append(insight(
@@ -436,7 +454,7 @@ def check_action_outputs(lib: dict, sch: dict) -> list:
     peds = sch.get("declared_peds", [])
     for ped in peds:
         for flag in ped.get("ezer_flags", []):
-            if flag.get("flag_type") == "PED_ICD_VAGUENESS":
+            if flag.get("flag_type") == "PED_ICD_VAGUENESS" and flag.get("status") != "RESOLVED":
                 letter = draft_ped_clarification_letter(sch, ped)
                 insights.append(insight(
                     "ACTION_REQUIRED", EXTRACTED,
@@ -451,6 +469,118 @@ def check_action_outputs(lib: dict, sch: dict) -> list:
                 ))
 
     return insights
+
+
+# ── Policy Evolution Timeline ──────────────────────────────────────────────────
+
+# Tier 1 plain-English names for specific disease conditions
+SPECIFIC_DISEASE_PLAIN = (
+    "Cataract, Hernia, Gallbladder stones, Kidney stones, "
+    "Joint replacement, Piles surgery, Prostate surgery, Sinusitis, "
+    "Tonsillitis, Varicose veins and other listed conditions"
+)
+
+def _parse_expiry(expiry_str: str):
+    """Parse approximate_expiry string to datetime. Returns None if unparseable."""
+    if not expiry_str or expiry_str in ("unknown date", "unknown"):
+        return None
+    for fmt in ("%B %Y", "%b %Y", "%Y-%m-%d", "%Y-%m"):
+        try:
+            return datetime.strptime(expiry_str.strip(), fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def generate_evolution_timeline(schedule: dict) -> list:
+    """
+    Scan all waiting period blocks for future expiry dates.
+    Group by date. Sort chronologically using datetime objects.
+    Returns list of milestone dicts. Empty list if no future milestones.
+    """
+    milestones = defaultdict(list)
+    blocks = schedule.get("waiting_periods", {}).get("si_blocks", [])
+    peds = schedule.get("declared_peds", [])
+    now = datetime.now()
+
+    for block in blocks:
+        si = block.get("si_inr", 0)
+        si_label = f"₹{si // 100000}L"
+        block_id = block.get("block_id", "")
+
+        # Specific disease expiry
+        spec = block.get("specific_disease_24_month_waiting", {})
+        if spec.get("status") == "running":
+            expiry_str = spec.get("approximate_expiry", "")
+            dt = _parse_expiry(expiry_str)
+            if dt and dt > now:
+                milestones[dt].append(
+                    f"{si_label} block ({block_id}) — Specific disease waiting expires. "
+                    f"{SPECIFIC_DISEASE_PLAIN} become claimable on this block."
+                )
+
+        # PED expiry — cross-reference with declared PEDs
+        ped_wp = block.get("ped_36_month_waiting", {})
+        if ped_wp.get("status") == "running":
+            expiry_str = ped_wp.get("approximate_expiry", "")
+            dt = _parse_expiry(expiry_str)
+            if dt and dt > now:
+                # Find which PEDs are affected
+                affected_peds = []
+                for ped in peds:
+                    wp_by_block = ped.get("waiting_period_by_block", {})
+                    for bid, binfo in wp_by_block.items():
+                        if not binfo.get("currently_covered", True):
+                            affected_peds.append(ped.get("condition_name", "Declared PED"))
+                ped_names = ", ".join(affected_peds) if affected_peds else "Declared PED(s)"
+                milestones[dt].append(
+                    f"{si_label} block ({block_id}) — PED waiting expires. "
+                    f"{ped_names} become(s) fully claimable on this block."
+                )
+
+    # Sort by datetime, return as list
+    sorted_milestones = []
+    for dt in sorted(milestones.keys()):
+        sorted_milestones.append({
+            "date": dt.strftime("%B %Y"),
+            "events": milestones[dt]
+        })
+
+    return sorted_milestones
+
+
+# ── Renewal Guidance ───────────────────────────────────────────────────────────
+
+def generate_renewal_guidance(lib: dict, sch: dict) -> list:
+    """
+    Compare Tier 1 optional addons against Tier 2 active addons.
+    Generate qualitative renewal recommendations for inactive features.
+    """
+    guidance = []
+    product_id = sch.get("_schema_meta", {}).get("product_id", "")
+    addons = sch.get("addons", sch.get("addons_active", {}))
+
+    # Unlimited Restore — available on both products, check if inactive
+    ur_active = addons.get("unlimited_restore_active") or addons.get("unlimited_restore", False)
+    if not ur_active:
+        guidance.append(
+            "Consider adding Unlimited Restore at renewal to protect against multiple "
+            "hospitalisations in the same year. Without it, once your SI and base restore "
+            "are exhausted, no further claims are payable. Check premium impact with your insurer."
+        )
+
+    # Protector Rider — Optima Restore only
+    if "OPTIMA_RESTORE" in product_id:
+        protector = addons.get("protector_rider", False)
+        if not protector:
+            guidance.append(
+                "Consider adding the Protector Rider at renewal to cover consumables "
+                "(gloves, masks, syringes, PPE, attendant charges and 60+ Annexure I items). "
+                "Without it, expect ₹10,000–30,000 in deductions per hospitalisation. "
+                "Check premium impact with your insurer."
+            )
+
+    return guidance
 
 
 # ── Master Engine ──────────────────────────────────────────────────────────────
@@ -515,8 +645,14 @@ def compute_summary(insights: list) -> dict:
         top = sorted(actions, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
         next_action = derive_action_instruction(top["title"], top["priority"])
     elif warnings:
-        top = sorted(warnings, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
-        next_action = "Be aware: " + top["title"]
+        high_warnings = [w for w in warnings if w["priority"] == "HIGH"]
+        if high_warnings:
+            top = sorted(high_warnings, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
+            # Use suggested_action if available, otherwise fall back to Be aware prefix
+            if top.get("suggested_action"):
+                next_action = top["suggested_action"]
+            else:
+                next_action = "Be aware: " + top["title"]
 
     return {
         "strength":    strength,
@@ -560,7 +696,7 @@ def print_insight(idx: int, ins: dict):
         print(f"      ── END DRAFT LETTER ──────────────────────────────────")
 
 
-def print_insights(schedule: dict, insights: list):
+def print_insights(schedule: dict, insights: list, timeline: list, renewal: list):
     summary = compute_summary(insights)
     print_summary_block(schedule, summary)
 
@@ -595,6 +731,20 @@ def print_insights(schedule: dict, insights: list):
             print_insight(idx, ins)
             idx += 1
 
+    # Renewal Guidance
+    if renewal:
+        print("\n  ── RENEWAL GUIDANCE " + "─" * 50)
+        for i, item in enumerate(renewal, 1):
+            print(f"\n  [R{i}] {item}")
+
+    # Policy Evolution Timeline — omit entirely if empty
+    if timeline:
+        print("\n  ── POLICY EVOLUTION TIMELINE " + "─" * 41)
+        for milestone in timeline:
+            print(f"\n  📅 {milestone['date']}")
+            for event in milestone["events"]:
+                print(f"      → {event}")
+
     print("\n" + "=" * 70 + "\n")
 
 
@@ -609,8 +759,12 @@ def run_all():
     for path in sorted(schedules):
         schedule = load_json(path)
         try:
+            pid = schedule.get("_schema_meta", {}).get("product_id", "")
+            library = load_product_library(pid)
             insights = generate_insights(schedule)
-            print_insights(schedule, insights)
+            timeline = generate_evolution_timeline(schedule)
+            renewal  = generate_renewal_guidance(library, schedule)
+            print_insights(schedule, insights, timeline, renewal)
         except Exception as e:
             name = schedule.get("policy_meta", {}).get("insured_name", str(path))
             print(f"\n❌ Error processing {name}: {e}")
