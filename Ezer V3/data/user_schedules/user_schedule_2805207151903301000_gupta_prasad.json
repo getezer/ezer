@@ -147,7 +147,11 @@
     "co_payment": false,
     "optima_wellbeing": false,
     "hospital_daily_cash_rider": false,
-    "critical_advantage_rider": false
+    "critical_advantage_rider": false,
+    "rider_ineligible_due_to_age": {
+      "unlimited_restore": "Informally unavailable — insurer declined URB for age 77 at renewal without written grounds. Age-based informal practice by HDFC ERGO.",
+      "protector_rider": "Not opted at inception — rider availability for senior citizens subject to insurer discretion at renewal."
+    }
   },
 
   "premium": {

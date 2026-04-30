@@ -607,7 +607,190 @@ def generate_insights(schedule: dict) -> list:
     return all_insights
 
 
-# ── Presentation Helpers ──────────────────────────────────────────────────────
+# ── Coverage Maturity & Clean SI ──────────────────────────────────────────────
+
+def compute_clean_si_ratio(lib: dict, sch: dict) -> float:
+    """
+    Compute % of total SI that is clean (no running waiting periods).
+    Numerator: base blocks fully waived + fully_accrued bonus + secure benefit
+    Denominator: all SI including enhanced blocks
+    Returns float 0.0 to 1.0
+    """
+    si = sch.get("sum_insured", {})
+    product_id = sch.get("_schema_meta", {}).get("product_id", "")
+    blocks = sch.get("waiting_periods", {}).get("si_blocks", [])
+
+    clean_si = 0
+    total_si = 0
+
+    # Base/enhanced blocks
+    for block in blocks:
+        block_si = block.get("si_inr", 0)
+        total_si += block_si
+        is_enhanced = block.get("si_enhanced", False)
+        # Also detect enhanced by block_id naming
+        bid = block.get("block_id", "")
+        if "enhanced" in bid.lower():
+            is_enhanced = True
+
+        # Check if all waiting periods are waived on this block
+        spec = block.get("specific_disease_24_month_waiting", {})
+        ped  = block.get("ped_36_month_waiting", {})
+        spec_clear = spec.get("status") != "running"
+        ped_clear  = ped.get("status") != "running"
+
+        if spec_clear and ped_clear:
+            clean_si += block_si
+
+    # Plus Benefit / Multiplier Benefit — only if fully_accrued
+    if "OPTIMA_SECURE" in product_id:
+        plus_status = si.get("plus_benefit_status", "")
+        plus_si     = si.get("plus_benefit_si_inr", 0)
+        if plus_si:
+            total_si += plus_si
+            if plus_status == "fully_accrued":
+                clean_si += plus_si
+        # Secure Benefit — always clean, no waiting period
+        secure_si = si.get("secure_benefit_si_inr", 0)
+        if secure_si:
+            total_si += secure_si
+            clean_si += secure_si
+
+    elif "OPTIMA_RESTORE" in product_id:
+        mult_status = si.get("multiplier_benefit_status", "")
+        mult_si     = si.get("multiplier_benefit_si_inr", 0)
+        if mult_si:
+            total_si += mult_si
+            if mult_status == "fully_accrued":
+                clean_si += mult_si
+
+    if total_si == 0:
+        return 0.0
+    return clean_si / total_si
+
+
+def derive_maturity_status(lib: dict, sch: dict) -> str:
+    """
+    3-state structural maturity based on waiting period clocks and rider status.
+    DEVELOPING: any fortress (base) block has a running waiting period
+    MATURING:   fortress clean, but enhanced blocks still cooking
+    MATURE:     all blocks clean AND critical riders active
+                (rider check skipped if unavailability flag set in Tier 2)
+    """
+    blocks = sch.get("waiting_periods", {}).get("si_blocks", [])
+    product_id = sch.get("_schema_meta", {}).get("product_id", "")
+    addons = sch.get("addons", sch.get("addons_active", {}))
+
+    fortress_clean = True
+    enhanced_cooking = False
+
+    # Identify fortress block — largest SI block is the original/base
+    if blocks:
+        max_si = max(b.get("si_inr", 0) for b in blocks)
+    else:
+        max_si = 0
+
+    for block in blocks:
+        bid = block.get("block_id", "")
+        block_si = block.get("si_inr", 0)
+        # Enhanced if explicitly flagged, or named "enhanced", or smaller than fortress
+        is_enhanced = (block.get("si_enhanced", False) or
+                      "enhanced" in bid.lower() or
+                      (block_si < max_si and max_si > 0))
+
+        spec = block.get("specific_disease_24_month_waiting", {})
+        ped  = block.get("ped_36_month_waiting", {})
+        has_running = spec.get("status") == "running" or ped.get("status") == "running"
+
+        if has_running:
+            if is_enhanced:
+                enhanced_cooking = True
+            else:
+                fortress_clean = False
+
+    if not fortress_clean:
+        return "DEVELOPING"
+
+    if enhanced_cooking:
+        return "MATURING"
+
+    # All clocks served — check critical riders for MATURE
+    # Optima Secure: Unlimited Restore + Protect Benefit
+    if "OPTIMA_SECURE" in product_id:
+        ur_active = addons.get("unlimited_restore_active", False)
+        protect_active = addons.get("protect_benefit_active", True)
+        # Check unavailability flags
+        ur_unavailable = bool(addons.get("rider_ineligible_due_to_age", {}).get("unlimited_restore", ""))
+        protect_unavailable = bool(addons.get("rider_ineligible_due_to_age", {}).get("protect_benefit", ""))
+        ur_ok = ur_active or ur_unavailable
+        protect_ok = protect_active or protect_unavailable
+        if ur_ok and protect_ok:
+            return "MATURE"
+        return "MATURING"
+
+    # Optima Restore: Unlimited Restore + Protector Rider
+    elif "OPTIMA_RESTORE" in product_id:
+        ur_active = addons.get("unlimited_restore", False) or \
+                    addons.get("unlimited_restore_active", False)
+        protector_active = addons.get("protector_rider", False)
+        ur_unavailable = bool(addons.get("rider_ineligible_due_to_age", {}).get("unlimited_restore", ""))
+        protector_unavailable = bool(addons.get("rider_ineligible_due_to_age", {}).get("protector_rider", ""))
+        ur_ok = ur_active or ur_unavailable
+        protector_ok = protector_active or protector_unavailable
+        if ur_ok and protector_ok:
+            return "MATURE"
+        return "MATURING"
+
+    return "MATURING"
+
+
+def compute_summary(insights: list, lib: dict = None, sch: dict = None) -> dict:
+    actions   = [i for i in insights if i["type"] == "ACTION"]
+    warnings  = [i for i in insights if i["type"] == "WARNING"]
+    high_warn = [i for i in warnings if i["priority"] == "HIGH"]
+    info      = [i for i in insights if i["type"] == "INFO"]
+
+    # Strength — now includes clean SI ratio
+    clean_pct = compute_clean_si_ratio(lib, sch) if (lib and sch) else 0.0
+
+    if len(actions) >= 1:
+        strength = "WEAK"
+    elif clean_pct >= 0.75 and len(high_warn) == 0:
+        strength = "STRONG"
+    elif clean_pct >= 0.75 and len(high_warn) > 0:
+        strength = "MODERATE"
+    elif len(high_warn) >= 1:
+        strength = "MODERATE"
+    else:
+        strength = "STRONG"
+
+    # Maturity
+    maturity = derive_maturity_status(lib, sch) if (lib and sch) else "DEVELOPING"
+
+    # Next Best Action
+    next_action = None
+    if actions:
+        top = sorted(actions, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
+        next_action = derive_action_instruction(top["title"], top["priority"])
+    elif warnings:
+        high_warnings = [w for w in warnings if w["priority"] == "HIGH"]
+        if high_warnings:
+            top = sorted(high_warnings, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
+            if top.get("suggested_action"):
+                next_action = top["suggested_action"]
+            else:
+                next_action = "Be aware: " + top["title"]
+
+    return {
+        "strength":      strength,
+        "maturity":      maturity,
+        "clean_pct":     round(clean_pct * 100),
+        "action_count":  len(actions),
+        "warning_count": len(warnings),
+        "info_count":    len(info),
+        "total":         len(insights),
+        "next_action":   next_action
+    }
 
 PRIORITY_ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
 
@@ -625,44 +808,6 @@ def derive_action_instruction(title: str, priority: str) -> str:
     return instruction
 
 
-def compute_summary(insights: list) -> dict:
-    actions   = [i for i in insights if i["type"] == "ACTION"]
-    warnings  = [i for i in insights if i["type"] == "WARNING"]
-    high_warn = [i for i in warnings if i["priority"] == "HIGH"]
-    info      = [i for i in insights if i["type"] == "INFO"]
-
-    # Strength
-    if len(actions) >= 1:
-        strength = "WEAK"
-    elif len(high_warn) >= 1:
-        strength = "MODERATE"
-    else:
-        strength = "STRONG"
-
-    # Next Best Action
-    next_action = None
-    if actions:
-        top = sorted(actions, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
-        next_action = derive_action_instruction(top["title"], top["priority"])
-    elif warnings:
-        high_warnings = [w for w in warnings if w["priority"] == "HIGH"]
-        if high_warnings:
-            top = sorted(high_warnings, key=lambda x: PRIORITY_ORDER.get(x["priority"], 9))[0]
-            # Use suggested_action if available, otherwise fall back to Be aware prefix
-            if top.get("suggested_action"):
-                next_action = top["suggested_action"]
-            else:
-                next_action = "Be aware: " + top["title"]
-
-    return {
-        "strength":    strength,
-        "action_count": len(actions),
-        "warning_count": len(warnings),
-        "info_count":   len(info),
-        "total":        len(insights),
-        "next_action":  next_action
-    }
-
 
 def print_summary_block(schedule: dict, summary: dict):
     name    = schedule.get("policy_meta", {}).get("insured_name", "Unknown")
@@ -670,12 +815,15 @@ def print_summary_block(schedule: dict, summary: dict):
     product = schedule.get("_schema_meta", {}).get("product_id", "")
 
     strength_icon = {"STRONG": "🟢", "MODERATE": "🟡", "WEAK": "🔴"}.get(summary["strength"], "⚪")
+    maturity_icon = {"MATURE": "🏛", "MATURING": "📈", "DEVELOPING": "🌱"}.get(summary["maturity"], "⚪")
 
     print("\n" + "=" * 70)
     print(f"  EZER POLICY REPORT — {name}")
     print(f"  Policy: {policy}  |  Product: {product}")
     print("=" * 70)
-    print(f"\n  {strength_icon} Policy Strength: {summary['strength']}")
+    print(f"\n  {strength_icon} Policy Strength: {summary['strength']}  |  "
+          f"{maturity_icon} Coverage Maturity: {summary['maturity']}  |  "
+          f"Clean SI: {summary['clean_pct']}%")
     print(f"  Actions Required: {summary['action_count']}  |  "
           f"Risks Identified: {summary['warning_count']}  |  "
           f"Total Insights: {summary['total']}")
@@ -696,8 +844,9 @@ def print_insight(idx: int, ins: dict):
         print(f"      ── END DRAFT LETTER ──────────────────────────────────")
 
 
-def print_insights(schedule: dict, insights: list, timeline: list, renewal: list):
-    summary = compute_summary(insights)
+def print_insights(schedule: dict, insights: list, timeline: list, renewal: list,
+                   library: dict = None):
+    summary = compute_summary(insights, library, schedule)
     print_summary_block(schedule, summary)
 
     # Group
@@ -764,7 +913,7 @@ def run_all():
             insights = generate_insights(schedule)
             timeline = generate_evolution_timeline(schedule)
             renewal  = generate_renewal_guidance(library, schedule)
-            print_insights(schedule, insights, timeline, renewal)
+            print_insights(schedule, insights, timeline, renewal, library)
         except Exception as e:
             name = schedule.get("policy_meta", {}).get("insured_name", str(path))
             print(f"\n❌ Error processing {name}: {e}")
