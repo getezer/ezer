@@ -1,14 +1,14 @@
 {
   "_schema_meta": {
-    "version": "1.0",
+    "version": "1.1",
     "ezer_tier": "Tier 2 — User Schedule",
     "product_id": "HDFC_ERGO_OPTIMA_RESTORE_V2526",
     "product_library_ref": "product_library_hdfc_optima_restore.json",
     "policy_number": "2805207151903301000",
     "last_curated_by": "human",
-    "last_curated_date": "2026-04-28",
+    "last_curated_date": "2026-04-30",
     "source_document": "Policy Schedule — Gupta Prasad Satapathy — Period 01/02/2026 to 31/01/2027",
-    "notes": "User-specific schedule data only. Product rules are in product_library_hdfc_optima_restore.json. Derived insights are computed at runtime by the Ezer Insight Engine by joining this file with the product library."
+    "notes": "Updated 30/04/2026 — HDFC ERGO responded to Ezer-generated PED ICD clarification letter. Written response received confirming PED applicability is governed by declared condition name, not ICD codes. PED quality flag updated to reflect partial mitigation. This is Ezer's second real-world outcome."
   },
 
   "policy_meta": {
@@ -117,12 +117,24 @@
       "endorsement_context": "Condition discovered during Urolift surgery hospitalisation July 2025. Mid-policy endorsement forced by Badal Satapathy. HDFC ERGO initially reluctant but endorsement completed.",
       "waiting_period_status": "moratorium_active — insurer cannot deny on non-disclosure grounds",
       "currently_covered": true,
-      "coverage_note": "Insurer explicitly accepted via endorsement. Moratorium (10 years active) prevents non-disclosure denial. ICD codes are vague catch-all — written confirmation of broad coverage scope should be obtained before cardiac hospitalisation.",
+      "coverage_note": "Insurer explicitly accepted via endorsement. Moratorium (10 years active) prevents non-disclosure denial. ICD codes are vague catch-all — written confirmation of broad coverage scope obtained 30/04/2026.",
+      "hdfc_ergo_written_position": {
+        "date": "2026-04-30",
+        "service_id": "111-633-844",
+        "responded_by": "Dipti Dubey, Red Circle Team",
+        "key_statement": "PED applicability will be considered strictly as per the conditions declared by the insured at the time of proposal/endorsement and accepted under the policy terms and conditions.",
+        "implication": "HDFC ERGO has confirmed in writing that the accepted condition name governs coverage determination — not ICD codes. Coverage for 'Other disorders of heart' is therefore as broad as the condition name itself. This written position is protective — a specific ICD list would have created boundaries, whereas the condition name approach is broader.",
+        "paper_trail_status": "COMPLETE — written response on record dated 30/04/2026"
+      },
       "ezer_flags": [
         {
           "flag_type": "PED_ICD_VAGUENESS",
           "priority": "HIGH",
-          "description": "HDFC ERGO confirmed no specific ICD code exists. Catch-all acceptance is broad but unspecific. At claim time for a specific cardiac event, insurer may attempt to argue specificity mismatch. Obtain written confirmation of broad scope coverage."
+          "status": "PARTIALLY_MITIGATED",
+          "mitigated_date": "2026-04-30",
+          "description": "HDFC ERGO confirmed no specific ICD code exists. Catch-all acceptance is broad but unspecific. At claim time for a specific cardiac event, insurer may attempt to argue specificity mismatch. Obtain written confirmation of broad scope coverage.",
+          "mitigation_note": "Written response received 30/04/2026. HDFC ERGO confirmed PED applicability is governed by declared condition name, not ICD codes. This is a broad shield — more protective than a specific ICD list. Ezer-generated letter prompted this written position on record.",
+          "ezer_outcome": "Second real-world Ezer outcome. PED quality flag detected by Insight Engine. Action letter generated. HDFC ERGO responded in writing with a position that creates broad protective coverage for 'Other disorders of heart'."
         }
       ]
     }
