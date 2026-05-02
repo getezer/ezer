@@ -1,0 +1,618 @@
+{
+  "_schema_meta": {
+    "version": "1.0",
+    "ezer_tier": "Settlement Data — V3.2",
+    "schema_type": "settlement",
+    "claim_reference": "RR-HS25-15050055",
+    "supplementary_claims": [
+      "RR-HS25-15050055-2",
+      "RR-HS25-15050055-3"
+    ],
+    "policy_number": "2805207151903300",
+    "user_schedule_ref": "user_schedule_2805207151903301000_gupta_prasad.json",
+    "product_library_ref": "product_library_hdfc_optima_restore.json",
+    "hdfc_ergo_id": "ER2434224975-01F",
+    "utr_number": "HDFCN52025080804564207",
+    "settlement_date": "2025-08-12",
+    "transaction_date": "2025-08-08",
+    "last_curated_by": "human",
+    "last_curated_date": "2026-05-02",
+    "notes": "Ground truth file for Gupta Prasad Satapathy Urolift claim. Curated manually from HDFC ERGO settlement letter. Powers V3.2 Settlement Advocate audit engine."
+  },
+
+  "claim_header": {
+    "patient_name": "Gupta Prasad Satapathy",
+    "main_member": "Badal Satapathy",
+    "relationship": "Father",
+    "hospital": "Care Hospitals, Bhubaneswar",
+    "ailment": "Benign prostatic hyperplasia without lower urinary tract symptoms",
+    "procedure": "Urolift",
+    "admission_date": "2025-07-22",
+    "discharge_date": "2025-07-23",
+    "stay_duration_hours": 24,
+    "claim_type": "REIMBURSEMENT",
+    "payee": "Badal Satapathy",
+    "bank": "State Bank of India",
+    "account_number": "XXXXXXXX3809",
+    "ifsc": "SBIN0010250"
+  },
+
+  "post_settlement_balance": {
+    "balance_sum_insured": 1536100,
+    "balance_cumulative_bonus": 525000,
+    "protector_rider": 0,
+    "note": "Protector Rider: 0 — explicitly confirmed by HDFC ERGO in settlement letter. Direct cause of ₹7,017 rider-dependent deductions."
+  },
+
+  "reconciliation_totals": {
+    "total_claimed": 475846.01,
+    "total_deducted_by_insurer": 9347.00,
+    "total_discount_mou": 2949.14,
+    "total_settled": 463549.87,
+    "gst": 350.00,
+    "grand_total_settled": 463900.00,
+    "rider_dependent_recoverable": 7017.00,
+    "non_payable": 2330.00,
+    "hospital_flags_paid_without_audit": 95561.81,
+    "total_asymmetry_payload": 104908.81,
+    "note": "Grand total ₹4,63,900 verified against settlement letter. Asymmetry payload = insurer deductions (₹9,347) + hospital flags paid without audit (₹95,561.81)."
+  },
+
+  "line_items": [
+
+    {
+      "bill_no": "4809",
+      "service_type": "Miscellaneous charges",
+      "item": "Registration Charges",
+      "claimed_amount": 660.00,
+      "deduction_amount": 660.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "NON_PAYABLE",
+      "flag_type": null,
+      "flag_reason": "Registration charges are non-medical administrative expenses. Not payable under any health insurance policy.",
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Hospital charges ₹660 for registering your admission. This is their administrative overhead — not your liability under insurance."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Room & Nursing Charges",
+      "item": "Room and Nursing",
+      "claimed_amount": 8760.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 8760.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Room and nursing charges correctly settled in full."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Under Pads",
+      "claimed_amount": 500.00,
+      "deduction_amount": 500.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active. Protector Rider: 0 on this policy.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Under pads are a standard surgical consumable. HDFC ERGO deducted this because your policy does not have the Protector Rider active. If the rider were active, this ₹500 would have been paid."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Investigation Charges",
+      "item": "Investigation Charges",
+      "claimed_amount": 380.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 380.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Investigation charges correctly settled in full."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Medicine & Consumables charges",
+      "item": "Ward Material",
+      "claimed_amount": 770.00,
+      "deduction_amount": 770.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active. Protector Rider: 0 on this policy.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Ward material is a consumable item deducted because the Protector Rider is absent. Would have been paid with rider active."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Other Expenses",
+      "item": "Hospitality Charges",
+      "claimed_amount": 610.00,
+      "deduction_amount": 610.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "NON_PAYABLE",
+      "flag_type": null,
+      "flag_reason": "Hospitality is a non-medical administrative charge. Not payable under any health insurance policy.",
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Hospitality charges are not a medical expense. Not claimable under any scenario."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Gauze",
+      "claimed_amount": 60.00,
+      "deduction_amount": 60.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Gauze is a surgical consumable deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Urine Pot",
+      "claimed_amount": 85.00,
+      "deduction_amount": 85.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Urine pot is a consumable deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Surgical Clipper Blade",
+      "claimed_amount": 960.00,
+      "deduction_amount": 960.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Surgical clipper blade is a consumable deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Gloves",
+      "claimed_amount": 337.00,
+      "deduction_amount": 337.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Surgical gloves are consumables deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Examination Gloves",
+      "claimed_amount": 540.00,
+      "deduction_amount": 540.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Examination gloves deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Dreape Sheet",
+      "claimed_amount": 180.00,
+      "deduction_amount": 180.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Surgical drape sheet deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Urine Bag",
+      "claimed_amount": 395.00,
+      "deduction_amount": 395.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Urine bag deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Room & Nursing Charges",
+      "item": "Injection Charges",
+      "claimed_amount": 250.00,
+      "deduction_amount": 250.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "NON_PAYABLE",
+      "flag_type": null,
+      "flag_reason": "Injection charges are classified as non-medical expenses by HDFC ERGO. Treated as part of nursing service — not separately payable.",
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Injection charges are considered part of nursing care by the insurer. Not payable as a separate line item."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Cotton",
+      "claimed_amount": 160.00,
+      "deduction_amount": 160.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "Annexure I consumable. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Cotton is a consumable deducted due to absent Protector Rider."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "OT Charges",
+      "item": "OT Charges — Main",
+      "claimed_amount": 360620.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 360620.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Main OT charges including Urolift implants and surgical fees. Correctly settled in full."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Professional Fees Charges",
+      "item": "Professional Fees",
+      "claimed_amount": 82090.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 82090.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Professional fees correctly settled in full."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Miscellaneous charges",
+      "item": "Miscellaneous — Settled",
+      "claimed_amount": 550.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 550.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Miscellaneous charges correctly settled."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Miscellaneous charges",
+      "item": "MRD Charges",
+      "claimed_amount": 660.00,
+      "deduction_amount": 660.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "NON_PAYABLE",
+      "flag_type": null,
+      "flag_reason": "Medical Record Department charges are administrative overhead. Providing medical records to the patient or insurer is the hospital's legal obligation — not a billable service.",
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "MRD charges are the hospital's cost of maintaining your records. They cannot legally bill you for this."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "OT Charges",
+      "item": "CSSD Charges",
+      "claimed_amount": 3030.00,
+      "deduction_amount": 3030.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "RIDER_DEPENDENT",
+      "flag_type": null,
+      "flag_reason": "CSSD (Central Sterile Services Department) — sterilisation of surgical tools. Annexure I item. Covered only if Protector Rider is active.",
+      "insurer_leakage": false,
+      "contestable": true,
+      "contest_target": "INSURER",
+      "simulation_mode_recoverable": true,
+      "plain_english": "Sterilisation of surgical instruments is a large deduction (₹3,030) entirely due to absent Protector Rider. This alone makes the rider worth considering at renewal."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "Other Expenses",
+      "item": "Attendant Pass",
+      "claimed_amount": 150.00,
+      "deduction_amount": 150.00,
+      "discount": 0,
+      "settled_amount": 0,
+      "insurer_action": "DEDUCTED",
+      "ezer_classification": "NON_PAYABLE",
+      "flag_type": null,
+      "flag_reason": "Attendant pass is a non-medical administrative charge. Not payable under any health insurance policy.",
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "The hospital charges for a pass to allow your family member to be with you. This is not a medical expense."
+    },
+
+    {
+      "bill_no": "4809",
+      "service_type": "pharmacyBillHead",
+      "item": "Pharmacy Bill — Net",
+      "claimed_amount": 14099.01,
+      "deduction_amount": 0,
+      "discount": 2949.14,
+      "settled_amount": 11149.87,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "Pharmacy bill settled after MOU discount of ₹2,949.14 applied."
+    },
+
+    {
+      "bill_no": "GST",
+      "service_type": "GST",
+      "item": "GST",
+      "claimed_amount": 350.00,
+      "deduction_amount": 0,
+      "discount": 0,
+      "settled_amount": 350.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "SETTLED",
+      "flag_type": null,
+      "flag_reason": null,
+      "insurer_leakage": false,
+      "contestable": false,
+      "contest_target": null,
+      "plain_english": "GST correctly settled."
+    }
+  ],
+
+  "hospital_flags": [
+    {
+      "flag_id": "HF001",
+      "item": "Duplicate First Visit Urology Consultation",
+      "amount": 1200.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "DUPLICATE_CHARGE",
+      "flag_reason": "Dr. Sumanta Kumar Mishra billed for First Visit Urology on Day 1 (July 22) and again on Day 2 (July 23). A first visit cannot occur twice with the same doctor on consecutive days. This is a billing code duplication.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "You were charged ₹1,200 for a 'first visit' by the same doctor on two consecutive days. A first visit can only happen once. The Day 2 charge is duplicate billing.",
+      "evidence_required": "Request consultation log showing date, time, and nature of both visits."
+    },
+
+    {
+      "flag_id": "HF002",
+      "item": "Clinically Improbable IV Fluid Volume — 21 Litres Normal Saline",
+      "amount": 5391.81,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "QUANTITY_ANOMALY",
+      "flag_reason": "Hospital billed 4 units of Normal Saline 3000ml (₹3,000) and 3 units of Normal Saline 3000ml (₹2,391.81) — totalling 7 units × 3000ml = 21 litres for a single 24-hour minimally invasive Urolift procedure. Clinical standard for post-operative IV fluid in a 24-hour stay is 2-3 litres maximum. 21 litres is physiologically improbable and indicative of bulk ward stock being billed to the patient.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "You were billed for 21 litres of saline drip for a one-day stay. The clinical maximum for this procedure is 2-3 litres. Ask the hospital to produce the fluid administration chart showing when each bag was administered.",
+      "evidence_required": "Request fluid balance chart and nursing notes confirming actual IV fluid administered."
+    },
+
+    {
+      "flag_id": "HF003",
+      "item": "Unexplained Equipment Charge — Urolift",
+      "amount": 84000.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "DEFINITION_REQUIRED",
+      "flag_reason": "Hospital billed ₹84,000 as a separate Equipment Charge alongside ₹3,00,000 for Urolift implants and ₹50,400 for Operation Theatre charges. The scope of this ₹84,000 charge is undefined — it is unclear what equipment it covers that is not already included in the implant cost or OT charges. This is classic unbundling — splitting a single service into multiple line items to inflate the total.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "You paid ₹3,00,000 for the Urolift implants and ₹50,400 for the operation theatre. The hospital also charged ₹84,000 for 'equipment' without explaining what this covers. Ask them to itemise exactly what this ₹84,000 paid for.",
+      "evidence_required": "Request written itemisation of what the Equipment Charge covers and why it is separate from OT and implant charges."
+    },
+
+    {
+      "flag_id": "HF004",
+      "item": "OT Monitoring Charges — Unbundled",
+      "amount": 1820.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "HOSPITAL_FLAG",
+      "flag_reason": "OT Monitoring Charges billed separately alongside OT charges. Standard OT charges include patient monitoring as part of the procedure. Billing monitoring as a separate line item is unbundling of a service already covered within the OT fee.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "Monitoring a patient during surgery is part of what OT charges cover. The hospital billed this separately as an additional ₹1,820 charge on top of the OT fee.",
+      "evidence_required": "Request hospital billing policy on OT monitoring — confirm whether this is included in standard OT charges."
+    },
+
+    {
+      "flag_id": "HF005",
+      "item": "Administrative Overhead Double-Dip",
+      "amount": 2200.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "HOSPITAL_FLAG",
+      "flag_reason": "Patient was charged ₹7,000 for AC Single room and ₹1,760 for Nursing Service Charges. Despite these room and nursing charges, the hospital added Hospitality (₹610), Ward Material (₹770), Registration (₹660), and Attendant Pass (₹160) — totalling ₹2,200 in overhead charges that duplicate services already covered by room rent.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "You paid ₹7,000 for a room and ₹1,760 for nursing. The hospital then added ₹2,200 in extra charges for hospitality, ward material, registration, and an attendant pass — services that should be included in the room and nursing charges.",
+      "evidence_required": "Request hospital policy on what is included in room rent and nursing charges."
+    },
+
+    {
+      "flag_id": "HF006",
+      "item": "Phantom Dietician Consultation",
+      "amount": 950.00,
+      "insurer_action": "PAID",
+      "ezer_classification": "HOSPITAL_FLAG",
+      "flag_type": "GHOST_CONSULTATION",
+      "flag_reason": "A Dietician IP Consultation (₹950) was billed for a patient admitted for a Urolift procedure — a minimally invasive urological surgery for benign prostatic hyperplasia. A dietician has no active clinical role in prostate surgery. The same ₹950 dietician charge also appears on the Cystoscopy bill 5 days earlier (July 17), confirming this is a template charge applied automatically regardless of whether the service was rendered. Hospital subsequently sent a staff member for a 1-minute visit during the Urolift stay to create a paper trail.",
+      "insurer_leakage": true,
+      "contestable": true,
+      "contest_target": "HOSPITAL",
+      "plain_english": "You were charged ₹950 for a dietician consultation during a prostate surgery. A dietician plays no role in this procedure. The same charge appeared on your cystoscopy bill 5 days earlier. This is a template charge billed to every patient regardless of clinical need.",
+      "evidence_required": "Request signed dietician consultation note with time, clinical assessment, and dietary recommendation given. If only a brief visit occurred, contest the full specialist consultation fee."
+    }
+  ],
+
+  "audit_summary": {
+    "layer_1_hospital_flags": {
+      "total_flags": 6,
+      "total_amount": 95561.81,
+      "insurer_paid_without_audit": 95561.81,
+      "high_confidence_flags": ["HF001", "HF002", "HF006"],
+      "medium_confidence_flags": ["HF003", "HF004", "HF005"],
+      "note": "All six flags were paid by HDFC ERGO without audit. This represents insurer leakage — failure to exercise fiduciary duty over the policyholder's sum insured."
+    },
+    "layer_2_insurer_deductions": {
+      "total_deducted": 9347.00,
+      "rider_dependent_recoverable": 7017.00,
+      "non_payable": 2330.00,
+      "recoverable_if_protector_rider_active": 7017.00,
+      "items_rider_dependent": [
+        "Under Pads", "Ward Material", "Gauze", "Urine Pot",
+        "Surgical Clipper Blade", "Gloves", "Examination Gloves",
+        "Dreape Sheet", "Urine Bag", "Cotton", "CSSD Charges"
+      ],
+      "items_non_payable": [
+        "Registration Charges", "Hospitality Charges",
+        "Injection Charges", "MRD Charges", "Attendant Pass"
+      ]
+    },
+    "asymmetry_payload": {
+      "visible_loss": 9347.00,
+      "invisible_loss": 95561.81,
+      "total": 104908.81,
+      "note": "Visible loss = what the insurer deducted and the patient knows about. Invisible loss = what the hospital charged incorrectly and the insurer paid without auditing. Total asymmetry payload = ₹1,04,908.81."
+    },
+    "simulation_mode": {
+      "description": "If Protector Rider were active, rider-dependent deductions would be paid",
+      "recoverable_amount": 7017.00,
+      "non_recoverable_regardless": 2330.00,
+      "note": "Simulation mode treats Protector Rider as active and recalculates settlement. Hospital flags remain unchanged in simulation mode — they are hospital errors, not insurer errors."
+    }
+  }
+}
