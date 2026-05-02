@@ -157,7 +157,47 @@ These will be added after the policy understanding layer is solid. The sequence 
 - Smaller blocks are treated as enhancements
 - Detection hierarchy: explicit `si_enhanced` flag → "enhanced" in block_id → smaller than largest block
 
+## Architecture Decision — V3.2 Settlement Advocate (Logged 2026-05-02)
+
+**The Two-Layer Audit:**
+- Layer 1 (Invisible Loss): hospital billing irregularities paid by insurer without audit
+- Layer 2 (Visible Loss): insurer deductions the patient receives but cannot interpret
+- Total Asymmetry Payload = Layer 1 + Layer 2
+- These two layers are always computed and displayed separately — never merged
+
+**Curated JSON over PDF Extraction:**
+- Settlement data is human-curated into JSON — same approach as policy schedules
+- No LLM extraction — reliability non-negotiable in insurance adjudication
+- Every line item verified against settlement letter before entry
+
+**The Decision Gate — Three Routes:**
+- Route is determined entirely from Tier 2 user schedule — no user input ever required
+- Route A: rider active → grievance letter (insurer wrongly deducted)
+- Route B: rider inactive + age flag → gap awareness (honest, no false promise)
+- Route C: rider inactive + no age flag → renewal action (financial case for rider)
+
+**Route B over Route A for Age-Ineligible Users (Deliberate Choice):**
+- When `rider_ineligible_due_to_age` flag is present, engine does not suppress the recovery amount
+- Shows ₹7,017 lost AND explains why rider may not be available at renewal
+- Honest gap awareness over false promise of recovery
+- This was Option B in a design discussion — chosen over Option A (suppress simulation) deliberately
+- Reason: even if rider is unavailable, the financial proof of its absence has negotiation value
+
+**PII Guardrail:**
+- Patient name and account number are read for internal processing only
+- Never written to any output file or terminal
+- Claim reference and hospital name are institutional identifiers — included in memos
+
+**Pydantic Full Contract Validation:**
+- All enums validated on load — hard gates on EzerClassification, InsurerAction, FlagType, ContestTarget
+- Engine refuses to run on invalid data — no silent failures acceptable in insurance context
+
+**Ezer Closes Information Asymmetry — Does Not Chase Claims:**
+- Ezer informs. User acts.
+- Engine generates letters and memos. User decides whether to send.
+- No automatic filing, no claim tracking, no Ombudsman automation
+
 ---
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-02*
 *Author: Badal Satapathy*

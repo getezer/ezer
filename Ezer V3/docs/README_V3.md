@@ -41,21 +41,33 @@ For unrecognized policies. LLM extraction with heavy low-confidence warning.
 Ezer V3/
 ├── data/
 │   ├── product_library/     ← Tier 1 JSON files
-│   └── user_schedules/      ← Tier 2 JSON files
-├── engine/                  ← Insight Engine (Python)
-│   └── insight_engine.py
+│   ├── user_schedules/      ← Tier 2 JSON files
+│   └── settlements/         ← Settlement data (V3.2)
+├── engine/
+│   ├── insight_engine.py    ← V3.1 Insight Engine
+│   ├── audit_engine.py      ← V3.2 Audit Engine
+│   └── symmetry_report.py   ← V3.2 Report Generator
+├── tests/
+│   └── test_routing.py      ← V3.2 Unit Tests
+├── reports/                 ← Generated report output
+│   └── GPS_RR_HS25_15050055/
+│       ├── hospital_memo.txt
+│       ├── settlement_comparison.txt
+│       └── rider_output.txt
 ├── api/                     ← FastAPI endpoints (not yet built)
 └── docs/
-    ├── DECISION.md                      ← Architecture decisions and failure analysis
-    ├── README_V3.md                     ← This file
-    ├── PRD_V3.1.md                      ← Product requirements
-    ├── TDD_V3.1.md                      ← Technical design document
-    ├── CURRENT_STATE.md                 ← Snapshot of what is working today
-    ├── V3_RETROSPECT.md                 ← Lessons from V1 and V2
-    ├── FIRST_OUTCOME.md                 ← First real-world outcome record
-    ├── V3.1_Product_Logic_Manifest.md   ← Fortress philosophy, 75% rule, senior exception
-    ├── V3.1_Technical_Architecture_Guide.md ← Data contracts, evaluative matrix, timeline engine
-    └── V3.1_Maintenance_Guide.md        ← How to add insights, update thresholds, add letters
+    ├── DECISION.md
+    ├── README_V3.md
+    ├── PRD_V3.1.md
+    ├── PRD_V3.2.md
+    ├── TDD_V3.1.md
+    ├── CURRENT_STATE.md
+    ├── V3_RETROSPECT.md
+    ├── FIRST_OUTCOME.md
+    ├── V3.1_Product_Logic_Manifest.md
+    ├── V3.1_Technical_Architecture_Guide.md
+    ├── V3.1_Maintenance_Guide.md
+    └── V3.2_Settlement_Advocate_Brief.md
 ```
 
 ---
@@ -85,17 +97,19 @@ Ezer V3/
 | Tier 1 — Product Libraries | ✅ Done |
 | Tier 2 — User Schedules | ✅ Done |
 | Insight Engine | ✅ Done |
-| Schedule Integrity Checker | ✅ Done — integrated in engine |
-| PED Quality Checker | ✅ Done — integrated in engine |
+| Schedule Integrity Checker | ✅ Done |
+| PED Quality Checker | ✅ Done |
 | Action Output — Draft Letters | ✅ Done |
-| Classification + Grouping | ✅ Done |
-| Policy Evolution Timeline | ✅ Done — V3.1 Sprint A |
-| Renewal Guidance Layer | ✅ Done — V3.1 Sprint A |
-| Coverage Maturity Score | ✅ Done — V3.1 Sprint B |
-| Strength via Clean SI Ratio | ✅ Done — V3.1 Sprint B |
-| FastAPI Endpoint | ⏳ Pending |
+| Policy Evolution Timeline | ✅ Done — V3.1 |
+| Renewal Guidance Layer | ✅ Done — V3.1 |
+| Coverage Maturity Score | ✅ Done — V3.1 |
+| Settlement Data Layer | ✅ Done — V3.2 |
+| Audit Engine | ✅ Done — V3.2 |
+| Symmetry Report Generator | ✅ Done — V3.2 |
+| Unit Tests — Routing | ✅ Done — V3.2 |
+| FastAPI Endpoint | ⏳ Next |
+| React Frontend | ⏳ Pending |
 | Correspondence Tracker | ⏳ Pending |
-| Claim Navigation | ⏳ Pending — after above are solid |
 
 ---
 
@@ -117,6 +131,6 @@ python engine/insight_engine.py
 
 ---
 
-*Last updated: 2026-04-30*
+*Last updated: 2026-05-02*
 *Author: Badal Satapathy*
 *Product: Ezer — getezer.app*
